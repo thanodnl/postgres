@@ -231,14 +231,14 @@ reservoir_get_next_S(ReservoirState rs, double t, int n)
  *----------
  */
 void
-sampler_random_init_state(uint32 seed, pg_prng_state *randstate)
+sampler_random_init_state(uint32 seed, pg_prng_state * randstate)
 {
 	pg_prng_seed(randstate, (uint64) seed);
 }
 
 /* Select a random value R uniformly distributed in (0 - 1) */
 double
-sampler_random_fract(pg_prng_state *randstate)
+sampler_random_fract(pg_prng_state * randstate)
 {
 	double		res;
 

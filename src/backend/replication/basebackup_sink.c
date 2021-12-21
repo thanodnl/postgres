@@ -21,7 +21,7 @@
  * share a buffer with the succesor bbsink.
  */
 void
-bbsink_forward_begin_backup(bbsink *sink)
+bbsink_forward_begin_backup(bbsink * sink)
 {
 	Assert(sink->bbs_next != NULL);
 	Assert(sink->bbs_state != NULL);
@@ -34,7 +34,7 @@ bbsink_forward_begin_backup(bbsink *sink)
  * Forward begin_archive callback.
  */
 void
-bbsink_forward_begin_archive(bbsink *sink, const char *archive_name)
+bbsink_forward_begin_archive(bbsink * sink, const char *archive_name)
 {
 	Assert(sink->bbs_next != NULL);
 	bbsink_begin_archive(sink->bbs_next, archive_name);
@@ -51,7 +51,7 @@ bbsink_forward_begin_archive(bbsink *sink, const char *archive_name)
  * data.
  */
 void
-bbsink_forward_archive_contents(bbsink *sink, size_t len)
+bbsink_forward_archive_contents(bbsink * sink, size_t len)
 {
 	Assert(sink->bbs_next != NULL);
 	Assert(sink->bbs_buffer == sink->bbs_next->bbs_buffer);
@@ -63,7 +63,7 @@ bbsink_forward_archive_contents(bbsink *sink, size_t len)
  * Forward end_archive callback.
  */
 void
-bbsink_forward_end_archive(bbsink *sink)
+bbsink_forward_end_archive(bbsink * sink)
 {
 	Assert(sink->bbs_next != NULL);
 	bbsink_end_archive(sink->bbs_next);
@@ -73,7 +73,7 @@ bbsink_forward_end_archive(bbsink *sink)
  * Forward begin_manifest callback.
  */
 void
-bbsink_forward_begin_manifest(bbsink *sink)
+bbsink_forward_begin_manifest(bbsink * sink)
 {
 	Assert(sink->bbs_next != NULL);
 	bbsink_begin_manifest(sink->bbs_next);
@@ -86,7 +86,7 @@ bbsink_forward_begin_manifest(bbsink *sink)
  * shared.
  */
 void
-bbsink_forward_manifest_contents(bbsink *sink, size_t len)
+bbsink_forward_manifest_contents(bbsink * sink, size_t len)
 {
 	Assert(sink->bbs_next != NULL);
 	Assert(sink->bbs_buffer == sink->bbs_next->bbs_buffer);
@@ -98,7 +98,7 @@ bbsink_forward_manifest_contents(bbsink *sink, size_t len)
  * Forward end_manifest callback.
  */
 void
-bbsink_forward_end_manifest(bbsink *sink)
+bbsink_forward_end_manifest(bbsink * sink)
 {
 	Assert(sink->bbs_next != NULL);
 	bbsink_end_manifest(sink->bbs_next);
@@ -108,7 +108,7 @@ bbsink_forward_end_manifest(bbsink *sink)
  * Forward end_backup callback.
  */
 void
-bbsink_forward_end_backup(bbsink *sink, XLogRecPtr endptr, TimeLineID endtli)
+bbsink_forward_end_backup(bbsink * sink, XLogRecPtr endptr, TimeLineID endtli)
 {
 	Assert(sink->bbs_next != NULL);
 	bbsink_end_backup(sink->bbs_next, endptr, endtli);
@@ -118,7 +118,7 @@ bbsink_forward_end_backup(bbsink *sink, XLogRecPtr endptr, TimeLineID endtli)
  * Forward cleanup callback.
  */
 void
-bbsink_forward_cleanup(bbsink *sink)
+bbsink_forward_cleanup(bbsink * sink)
 {
 	Assert(sink->bbs_next != NULL);
 	bbsink_cleanup(sink->bbs_next);

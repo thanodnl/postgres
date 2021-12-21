@@ -255,7 +255,7 @@ typedef enum GlobalVisHorizonKind
 	VISHORIZON_CATALOG,
 	VISHORIZON_DATA,
 	VISHORIZON_TEMP
-} GlobalVisHorizonKind;
+}			GlobalVisHorizonKind;
 
 
 static ProcArrayStruct *procArray;

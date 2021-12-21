@@ -19,17 +19,17 @@
 #include "replication/basebackup.h"
 #include "replication/basebackup_sink.h"
 
-static void bbsink_copytblspc_begin_backup(bbsink *sink);
-static void bbsink_copytblspc_begin_archive(bbsink *sink,
+static void bbsink_copytblspc_begin_backup(bbsink * sink);
+static void bbsink_copytblspc_begin_archive(bbsink * sink,
 											const char *archive_name);
-static void bbsink_copytblspc_archive_contents(bbsink *sink, size_t len);
-static void bbsink_copytblspc_end_archive(bbsink *sink);
-static void bbsink_copytblspc_begin_manifest(bbsink *sink);
-static void bbsink_copytblspc_manifest_contents(bbsink *sink, size_t len);
-static void bbsink_copytblspc_end_manifest(bbsink *sink);
-static void bbsink_copytblspc_end_backup(bbsink *sink, XLogRecPtr endptr,
+static void bbsink_copytblspc_archive_contents(bbsink * sink, size_t len);
+static void bbsink_copytblspc_end_archive(bbsink * sink);
+static void bbsink_copytblspc_begin_manifest(bbsink * sink);
+static void bbsink_copytblspc_manifest_contents(bbsink * sink, size_t len);
+static void bbsink_copytblspc_end_manifest(bbsink * sink);
+static void bbsink_copytblspc_end_backup(bbsink * sink, XLogRecPtr endptr,
 										 TimeLineID endtli);
-static void bbsink_copytblspc_cleanup(bbsink *sink);
+static void bbsink_copytblspc_cleanup(bbsink * sink);
 
 static void SendCopyOutResponse(void);
 static void SendCopyData(const char *data, size_t len);
@@ -38,7 +38,7 @@ static void SendXlogRecPtrResult(XLogRecPtr ptr, TimeLineID tli);
 static void SendTablespaceList(List *tablespaces);
 static void send_int8_string(StringInfoData *buf, int64 intval);
 
-const bbsink_ops bbsink_copytblspc_ops = {
+const		bbsink_ops bbsink_copytblspc_ops = {
 	.begin_backup = bbsink_copytblspc_begin_backup,
 	.begin_archive = bbsink_copytblspc_begin_archive,
 	.archive_contents = bbsink_copytblspc_archive_contents,
@@ -58,7 +58,7 @@ bbsink_copytblspc_new(void)
 {
 	bbsink	   *sink = palloc0(sizeof(bbsink));
 
-	*((const bbsink_ops **) &sink->bbs_ops) = &bbsink_copytblspc_ops;
+	*((const bbsink_ops * *) &sink->bbs_ops) = &bbsink_copytblspc_ops;
 
 	return sink;
 }
@@ -67,7 +67,7 @@ bbsink_copytblspc_new(void)
  * Begin backup.
  */
 static void
-bbsink_copytblspc_begin_backup(bbsink *sink)
+bbsink_copytblspc_begin_backup(bbsink * sink)
 {
 	bbsink_state *state = sink->bbs_state;
 
@@ -89,7 +89,7 @@ bbsink_copytblspc_begin_backup(bbsink *sink)
  * with a CopyOutResponse message.
  */
 static void
-bbsink_copytblspc_begin_archive(bbsink *sink, const char *archive_name)
+bbsink_copytblspc_begin_archive(bbsink * sink, const char *archive_name)
 {
 	SendCopyOutResponse();
 }
@@ -98,7 +98,7 @@ bbsink_copytblspc_begin_archive(bbsink *sink, const char *archive_name)
  * Each chunk of data within the archive is sent as a CopyData message.
  */
 static void
-bbsink_copytblspc_archive_contents(bbsink *sink, size_t len)
+bbsink_copytblspc_archive_contents(bbsink * sink, size_t len)
 {
 	SendCopyData(sink->bbs_buffer, len);
 }
@@ -107,7 +107,7 @@ bbsink_copytblspc_archive_contents(bbsink *sink, size_t len)
  * The archive is terminated by a CopyDone message.
  */
 static void
-bbsink_copytblspc_end_archive(bbsink *sink)
+bbsink_copytblspc_end_archive(bbsink * sink)
 {
 	SendCopyDone();
 }
@@ -117,7 +117,7 @@ bbsink_copytblspc_end_archive(bbsink *sink)
  * begins with a CopyOutResponse message.
  */
 static void
-bbsink_copytblspc_begin_manifest(bbsink *sink)
+bbsink_copytblspc_begin_manifest(bbsink * sink)
 {
 	SendCopyOutResponse();
 }
@@ -126,7 +126,7 @@ bbsink_copytblspc_begin_manifest(bbsink *sink)
  * Each chunk of manifest data is sent using a CopyData message.
  */
 static void
-bbsink_copytblspc_manifest_contents(bbsink *sink, size_t len)
+bbsink_copytblspc_manifest_contents(bbsink * sink, size_t len)
 {
 	SendCopyData(sink->bbs_buffer, len);
 }
@@ -135,7 +135,7 @@ bbsink_copytblspc_manifest_contents(bbsink *sink, size_t len)
  * When we've finished sending the manifest, send a CopyDone message.
  */
 static void
-bbsink_copytblspc_end_manifest(bbsink *sink)
+bbsink_copytblspc_end_manifest(bbsink * sink)
 {
 	SendCopyDone();
 }
@@ -144,7 +144,7 @@ bbsink_copytblspc_end_manifest(bbsink *sink)
  * Send end-of-backup wire protocol messages.
  */
 static void
-bbsink_copytblspc_end_backup(bbsink *sink, XLogRecPtr endptr,
+bbsink_copytblspc_end_backup(bbsink * sink, XLogRecPtr endptr,
 							 TimeLineID endtli)
 {
 	SendXlogRecPtrResult(endptr, endtli);
@@ -154,7 +154,7 @@ bbsink_copytblspc_end_backup(bbsink *sink, XLogRecPtr endptr,
  * Cleanup.
  */
 static void
-bbsink_copytblspc_cleanup(bbsink *sink)
+bbsink_copytblspc_cleanup(bbsink * sink)
 {
 	/* Nothing to do. */
 }

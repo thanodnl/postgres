@@ -22,7 +22,7 @@
 Integer *
 makeInteger(int i)
 {
-	Integer	   *v = makeNode(Integer);
+	Integer    *v = makeNode(Integer);
 
 	v->val = i;
 	return v;

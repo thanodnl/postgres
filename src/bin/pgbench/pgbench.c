@@ -896,7 +896,7 @@ strtodouble(const char *str, bool errorOK, double *dv)
  * We derive the seed from base_random_sequence, which must be set up already.
  */
 static void
-initRandomState(pg_prng_state *state)
+initRandomState(pg_prng_state * state)
 {
 	pg_prng_seed(state, pg_prng_uint64(&base_random_sequence));
 }
@@ -910,7 +910,7 @@ initRandomState(pg_prng_state *state)
  * overflow int64.  This is not checked.
  */
 static int64
-getrand(pg_prng_state *state, int64 min, int64 max)
+getrand(pg_prng_state * state, int64 min, int64 max)
 {
 	return min + (int64) pg_prng_uint64_range(state, 0, max - min);
 }
@@ -921,7 +921,7 @@ getrand(pg_prng_state *state, int64 min, int64 max)
  * value is exp(-parameter).
  */
 static int64
-getExponentialRand(pg_prng_state *state, int64 min, int64 max,
+getExponentialRand(pg_prng_state * state, int64 min, int64 max,
 				   double parameter)
 {
 	double		cut,
@@ -945,7 +945,7 @@ getExponentialRand(pg_prng_state *state, int64 min, int64 max,
 
 /* random number generator: gaussian distribution from min to max inclusive */
 static int64
-getGaussianRand(pg_prng_state *state, int64 min, int64 max,
+getGaussianRand(pg_prng_state * state, int64 min, int64 max,
 				double parameter)
 {
 	double		stdev;
@@ -1005,7 +1005,7 @@ getGaussianRand(pg_prng_state *state, int64 min, int64 max,
  * not be one.
  */
 static int64
-getPoissonRand(pg_prng_state *state, double center)
+getPoissonRand(pg_prng_state * state, double center)
 {
 	/*
 	 * Use inverse transform sampling to generate a value > 0, such that the
@@ -1027,7 +1027,7 @@ getPoissonRand(pg_prng_state *state, double center)
  * This works for s > 1.0, but may perform badly for s very close to 1.0.
  */
 static int64
-computeIterativeZipfian(pg_prng_state *state, int64 n, double s)
+computeIterativeZipfian(pg_prng_state * state, int64 n, double s)
 {
 	double		b = pow(2.0, s - 1.0);
 	double		x,
@@ -1057,7 +1057,7 @@ computeIterativeZipfian(pg_prng_state *state, int64 n, double s)
 
 /* random number generator: zipfian distribution from min to max inclusive */
 static int64
-getZipfianRand(pg_prng_state *state, int64 min, int64 max, double s)
+getZipfianRand(pg_prng_state * state, int64 min, int64 max, double s)
 {
 	int64		n = max - min + 1;
 
@@ -4135,7 +4135,7 @@ initGenerateDataClientSide(PGconn *con)
 	PGresult   *res;
 	int			i;
 	int64		k;
-	char		*copy_statement;
+	char	   *copy_statement;
 
 	/* used to track elapsed time and estimate of the remaining time */
 	pg_time_usec_t start;

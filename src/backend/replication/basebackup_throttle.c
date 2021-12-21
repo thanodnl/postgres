@@ -36,14 +36,14 @@ typedef struct bbsink_throttle
 
 	/* The last check of the transfer rate. */
 	TimestampTz throttled_last;
-} bbsink_throttle;
+}			bbsink_throttle;
 
-static void bbsink_throttle_begin_backup(bbsink *sink);
-static void bbsink_throttle_archive_contents(bbsink *sink, size_t len);
-static void bbsink_throttle_manifest_contents(bbsink *sink, size_t len);
-static void throttle(bbsink_throttle *sink, size_t increment);
+static void bbsink_throttle_begin_backup(bbsink * sink);
+static void bbsink_throttle_archive_contents(bbsink * sink, size_t len);
+static void bbsink_throttle_manifest_contents(bbsink * sink, size_t len);
+static void throttle(bbsink_throttle * sink, size_t increment);
 
-const bbsink_ops bbsink_throttle_ops = {
+const		bbsink_ops bbsink_throttle_ops = {
 	.begin_backup = bbsink_throttle_begin_backup,
 	.begin_archive = bbsink_forward_begin_archive,
 	.archive_contents = bbsink_throttle_archive_contents,
@@ -65,7 +65,7 @@ const bbsink_ops bbsink_throttle_ops = {
  * to a successor sink.
  */
 bbsink *
-bbsink_throttle_new(bbsink *next, uint32 maxrate)
+bbsink_throttle_new(bbsink * next, uint32 maxrate)
 {
 	bbsink_throttle *sink;
 
@@ -73,7 +73,7 @@ bbsink_throttle_new(bbsink *next, uint32 maxrate)
 	Assert(maxrate > 0);
 
 	sink = palloc0(sizeof(bbsink_throttle));
-	*((const bbsink_ops **) &sink->base.bbs_ops) = &bbsink_throttle_ops;
+	*((const bbsink_ops * *) &sink->base.bbs_ops) = &bbsink_throttle_ops;
 	sink->base.bbs_next = next;
 
 	sink->throttling_sample =
@@ -93,7 +93,7 @@ bbsink_throttle_new(bbsink *next, uint32 maxrate)
  * that it can be used for future calculations.
  */
 static void
-bbsink_throttle_begin_backup(bbsink *sink)
+bbsink_throttle_begin_backup(bbsink * sink)
 {
 	bbsink_throttle *mysink = (bbsink_throttle *) sink;
 
@@ -107,7 +107,7 @@ bbsink_throttle_begin_backup(bbsink *sink)
  * First throttle, and then pass archive contents to next sink.
  */
 static void
-bbsink_throttle_archive_contents(bbsink *sink, size_t len)
+bbsink_throttle_archive_contents(bbsink * sink, size_t len)
 {
 	throttle((bbsink_throttle *) sink, len);
 
@@ -118,7 +118,7 @@ bbsink_throttle_archive_contents(bbsink *sink, size_t len)
  * First throttle, and then pass manifest contents to next sink.
  */
 static void
-bbsink_throttle_manifest_contents(bbsink *sink, size_t len)
+bbsink_throttle_manifest_contents(bbsink * sink, size_t len)
 {
 	throttle((bbsink_throttle *) sink, len);
 
@@ -131,7 +131,7 @@ bbsink_throttle_manifest_contents(bbsink *sink, size_t len)
  * rate.
  */
 static void
-throttle(bbsink_throttle *sink, size_t increment)
+throttle(bbsink_throttle * sink, size_t increment)
 {
 	TimeOffset	elapsed_min;
 

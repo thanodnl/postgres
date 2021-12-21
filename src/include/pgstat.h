@@ -190,8 +190,8 @@ typedef struct PgStat_TableXactStatus
 	PgStat_Counter tuples_inserted; /* tuples inserted in (sub)xact */
 	PgStat_Counter tuples_updated;	/* tuples updated in (sub)xact */
 	PgStat_Counter tuples_deleted;	/* tuples deleted in (sub)xact */
-	bool		truncdropped;		/* relation truncated/dropped in this
-									 * (sub)xact */
+	bool		truncdropped;	/* relation truncated/dropped in this
+								 * (sub)xact */
 	/* tuples i/u/d prior to truncate/drop */
 	PgStat_Counter inserted_pre_truncdrop;
 	PgStat_Counter updated_pre_truncdrop;
@@ -482,7 +482,7 @@ typedef struct PgStat_MsgCheckpointer
 	PgStat_Counter m_buf_fsync_backend;
 	PgStat_Counter m_checkpoint_write_time; /* times in milliseconds */
 	PgStat_Counter m_checkpoint_sync_time;
-} PgStat_MsgCheckpointer;
+}			PgStat_MsgCheckpointer;
 
 /* ----------
  * PgStat_MsgWal			Sent by backends and background processes to update WAL statistics.
@@ -913,7 +913,7 @@ typedef struct PgStat_BgWriterStats
 	PgStat_Counter maxwritten_clean;
 	PgStat_Counter buf_alloc;
 	TimestampTz stat_reset_timestamp;
-} PgStat_BgWriterStats;
+}			PgStat_BgWriterStats;
 
 /*
  * Checkpointer statistics kept in the stats collector
@@ -928,7 +928,7 @@ typedef struct PgStat_CheckpointerStats
 	PgStat_Counter buf_written_checkpoints;
 	PgStat_Counter buf_written_backend;
 	PgStat_Counter buf_fsync_backend;
-} PgStat_CheckpointerStats;
+}			PgStat_CheckpointerStats;
 
 /*
  * Global statistics kept in the stats collector
@@ -1229,8 +1229,8 @@ extern PgStat_StatFuncEntry *pgstat_fetch_stat_funcentry(Oid funcid);
 extern PgStat_StatSubWorkerEntry *pgstat_fetch_stat_subworker_entry(Oid subid,
 																	Oid subrelid);
 extern PgStat_ArchiverStats *pgstat_fetch_stat_archiver(void);
-extern PgStat_BgWriterStats *pgstat_fetch_stat_bgwriter(void);
-extern PgStat_CheckpointerStats *pgstat_fetch_stat_checkpointer(void);
+extern PgStat_BgWriterStats * pgstat_fetch_stat_bgwriter(void);
+extern PgStat_CheckpointerStats * pgstat_fetch_stat_checkpointer(void);
 extern PgStat_GlobalStats *pgstat_fetch_global(void);
 extern PgStat_WalStats *pgstat_fetch_stat_wal(void);
 extern PgStat_SLRUStats *pgstat_fetch_slru(void);

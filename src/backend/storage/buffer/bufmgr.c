@@ -666,9 +666,8 @@ ReadRecentBuffer(RelFileNode rnode, ForkNumber forkNum, BlockNumber blockNum,
 		{
 			/*
 			 * It's now safe to pin the buffer.  We can't pin first and ask
-			 * questions later, because it might confuse code paths
-			 * like InvalidateBuffer() if we pinned a random non-matching
-			 * buffer.
+			 * questions later, because it might confuse code paths like
+			 * InvalidateBuffer() if we pinned a random non-matching buffer.
 			 */
 			if (have_private_ref)
 				PinBuffer(bufHdr, NULL);	/* bump pin count */
@@ -2937,10 +2936,10 @@ RelationGetNumberOfBlocksInFork(Relation relation, ForkNumber forkNum)
 	if (RELKIND_HAS_TABLE_AM(relation->rd_rel->relkind))
 	{
 		/*
-		 * Not every table AM uses BLCKSZ wide fixed size blocks.
-		 * Therefore tableam returns the size in bytes - but for the
-		 * purpose of this routine, we want the number of blocks.
-		 * Therefore divide, rounding up.
+		 * Not every table AM uses BLCKSZ wide fixed size blocks. Therefore
+		 * tableam returns the size in bytes - but for the purpose of this
+		 * routine, we want the number of blocks. Therefore divide, rounding
+		 * up.
 		 */
 		uint64		szbytes;
 
@@ -2950,7 +2949,7 @@ RelationGetNumberOfBlocksInFork(Relation relation, ForkNumber forkNum)
 	}
 	else if (RELKIND_HAS_STORAGE(relation->rd_rel->relkind))
 	{
-			return smgrnblocks(RelationGetSmgr(relation), forkNum);
+		return smgrnblocks(RelationGetSmgr(relation), forkNum);
 	}
 	else
 		Assert(false);

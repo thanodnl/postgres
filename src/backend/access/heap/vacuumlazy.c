@@ -164,7 +164,7 @@ typedef struct LVDeadItems
 
 	/* Sorted array of TIDs to delete from indexes */
 	ItemPointerData items[FLEXIBLE_ARRAY_MEMBER];
-} LVDeadItems;
+}			LVDeadItems;
 
 #define MAXDEADITEMS(avail_mem) \
 	(((avail_mem) - offsetof(LVDeadItems, items)) / sizeof(ItemPointerData))
@@ -433,7 +433,7 @@ static bool should_attempt_truncation(LVRelState *vacrel);
 static void lazy_truncate_heap(LVRelState *vacrel);
 static BlockNumber count_nondeletable_pages(LVRelState *vacrel,
 											bool *lock_waiter_detected);
-static int dead_items_max_items(LVRelState *vacrel);
+static int	dead_items_max_items(LVRelState *vacrel);
 static inline Size max_items_to_alloc_size(int max_items);
 static void dead_items_alloc(LVRelState *vacrel, int nworkers);
 static void dead_items_cleanup(LVRelState *vacrel);

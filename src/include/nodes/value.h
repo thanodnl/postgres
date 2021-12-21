@@ -29,7 +29,7 @@ typedef struct Integer
 {
 	NodeTag		type;
 	int			val;
-} Integer;
+}			Integer;
 
 /*
  * Float is internally represented as string.  Using T_Float as the node type
@@ -46,27 +46,27 @@ typedef struct Float
 {
 	NodeTag		type;
 	char	   *val;
-} Float;
+}			Float;
 
 typedef struct String
 {
 	NodeTag		type;
 	char	   *val;
-} String;
+}			String;
 
 typedef struct BitString
 {
 	NodeTag		type;
 	char	   *val;
-} BitString;
+}			BitString;
 
 #define intVal(v)		(castNode(Integer, v)->val)
 #define floatVal(v)		atof(castNode(Float, v)->val)
 #define strVal(v)		(castNode(String, v)->val)
 
-extern Integer *makeInteger(int i);
-extern Float *makeFloat(char *numericStr);
-extern String *makeString(char *str);
-extern BitString *makeBitString(char *str);
+extern Integer * makeInteger(int i);
+extern Float * makeFloat(char *numericStr);
+extern String * makeString(char *str);
+extern BitString * makeBitString(char *str);
 
 #endif							/* VALUE_H */

@@ -166,7 +166,7 @@ typedef struct InvalMessageArray
 {
 	SharedInvalidationMessage *msgs;	/* palloc'd array (can be expanded) */
 	int			maxmsgs;		/* current allocated size of array */
-} InvalMessageArray;
+}			InvalMessageArray;
 
 static InvalMessageArray InvalMessageArrays[2];
 
@@ -175,7 +175,7 @@ typedef struct InvalidationMsgsGroup
 {
 	int			firstmsg[2];	/* first index in relevant array */
 	int			nextmsg[2];		/* last+1 index */
-} InvalidationMsgsGroup;
+}			InvalidationMsgsGroup;
 
 /* Macros to help preserve InvalidationMsgsGroup abstraction */
 #define SetSubGroupToFollow(targetgroup, priorgroup, subgroup) \
@@ -287,7 +287,7 @@ static int	relcache_callback_count = 0;
  * subgroup must be CatCacheMsgs or RelCacheMsgs.
  */
 static void
-AddInvalidationMessage(InvalidationMsgsGroup *group, int subgroup,
+AddInvalidationMessage(InvalidationMsgsGroup * group, int subgroup,
 					   const SharedInvalidationMessage *msg)
 {
 	InvalMessageArray *ima = &InvalMessageArrays[subgroup];
@@ -327,8 +327,8 @@ AddInvalidationMessage(InvalidationMsgsGroup *group, int subgroup,
  * the source subgroup to empty.
  */
 static void
-AppendInvalidationMessageSubGroup(InvalidationMsgsGroup *dest,
-								  InvalidationMsgsGroup *src,
+AppendInvalidationMessageSubGroup(InvalidationMsgsGroup * dest,
+								  InvalidationMsgsGroup * src,
 								  int subgroup)
 {
 	/* Messages must be adjacent in main array */
@@ -392,7 +392,7 @@ AppendInvalidationMessageSubGroup(InvalidationMsgsGroup *dest,
  * Add a catcache inval entry
  */
 static void
-AddCatcacheInvalidationMessage(InvalidationMsgsGroup *group,
+AddCatcacheInvalidationMessage(InvalidationMsgsGroup * group,
 							   int id, uint32 hashValue, Oid dbId)
 {
 	SharedInvalidationMessage msg;
@@ -420,7 +420,7 @@ AddCatcacheInvalidationMessage(InvalidationMsgsGroup *group,
  * Add a whole-catalog inval entry
  */
 static void
-AddCatalogInvalidationMessage(InvalidationMsgsGroup *group,
+AddCatalogInvalidationMessage(InvalidationMsgsGroup * group,
 							  Oid dbId, Oid catId)
 {
 	SharedInvalidationMessage msg;
@@ -438,7 +438,7 @@ AddCatalogInvalidationMessage(InvalidationMsgsGroup *group,
  * Add a relcache inval entry
  */
 static void
-AddRelcacheInvalidationMessage(InvalidationMsgsGroup *group,
+AddRelcacheInvalidationMessage(InvalidationMsgsGroup * group,
 							   Oid dbId, Oid relId)
 {
 	SharedInvalidationMessage msg;
@@ -470,7 +470,7 @@ AddRelcacheInvalidationMessage(InvalidationMsgsGroup *group,
  * We put these into the relcache subgroup for simplicity.
  */
 static void
-AddSnapshotInvalidationMessage(InvalidationMsgsGroup *group,
+AddSnapshotInvalidationMessage(InvalidationMsgsGroup * group,
 							   Oid dbId, Oid relId)
 {
 	SharedInvalidationMessage msg;
@@ -497,8 +497,8 @@ AddSnapshotInvalidationMessage(InvalidationMsgsGroup *group,
  * the source group to empty.
  */
 static void
-AppendInvalidationMessages(InvalidationMsgsGroup *dest,
-						   InvalidationMsgsGroup *src)
+AppendInvalidationMessages(InvalidationMsgsGroup * dest,
+						   InvalidationMsgsGroup * src)
 {
 	AppendInvalidationMessageSubGroup(dest, src, CatCacheMsgs);
 	AppendInvalidationMessageSubGroup(dest, src, RelCacheMsgs);
@@ -511,7 +511,7 @@ AppendInvalidationMessages(InvalidationMsgsGroup *dest,
  * catcache entries are processed first, for reasons mentioned above.
  */
 static void
-ProcessInvalidationMessages(InvalidationMsgsGroup *group,
+ProcessInvalidationMessages(InvalidationMsgsGroup * group,
 							void (*func) (SharedInvalidationMessage *msg))
 {
 	ProcessMessageSubGroup(group, CatCacheMsgs, func(msg));
@@ -523,7 +523,7 @@ ProcessInvalidationMessages(InvalidationMsgsGroup *group,
  * rather than just one at a time.
  */
 static void
-ProcessInvalidationMessagesMulti(InvalidationMsgsGroup *group,
+ProcessInvalidationMessagesMulti(InvalidationMsgsGroup * group,
 								 void (*func) (const SharedInvalidationMessage *msgs, int n))
 {
 	ProcessMessageSubGroupMulti(group, CatCacheMsgs, func(msgs, n));

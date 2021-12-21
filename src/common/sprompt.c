@@ -51,7 +51,7 @@ simple_prompt(const char *prompt, bool echo)
  */
 char *
 simple_prompt_extended(const char *prompt, bool echo,
-					   PromptInterruptContext *prompt_ctx)
+					   PromptInterruptContext * prompt_ctx)
 {
 	char	   *result;
 	FILE	   *termin,

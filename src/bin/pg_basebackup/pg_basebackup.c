@@ -170,10 +170,10 @@ static void verify_dir_is_empty_or_create(char *dirname, bool *created, bool *fo
 static void progress_update_filename(const char *filename);
 static void progress_report(int tablespacenum, bool force, bool finished);
 
-static bbstreamer *CreateBackupStreamer(char *archive_name, char *spclocation,
-										bbstreamer **manifest_inject_streamer_p,
-										bool is_recovery_guc_supported,
-										bool expect_unterminated_tarfile);
+static bbstreamer * CreateBackupStreamer(char *archive_name, char *spclocation,
+										 bbstreamer * *manifest_inject_streamer_p,
+										 bool is_recovery_guc_supported,
+										 bool expect_unterminated_tarfile);
 static void ReceiveTarFile(PGconn *conn, char *archive_name, char *spclocation,
 						   bool tablespacenum);
 static void ReceiveTarCopyChunk(size_t r, char *copybuf, void *callback_data);
@@ -971,7 +971,7 @@ ReceiveCopyData(PGconn *conn, WriteDataCallback callback,
  */
 static bbstreamer *
 CreateBackupStreamer(char *archive_name, char *spclocation,
-					 bbstreamer **manifest_inject_streamer_p,
+					 bbstreamer * *manifest_inject_streamer_p,
 					 bool is_recovery_guc_supported,
 					 bool expect_unterminated_tarfile)
 {
@@ -989,10 +989,11 @@ CreateBackupStreamer(char *archive_name, char *spclocation,
 
 	/*
 	 * We have to parse the archive if (1) we're suppose to extract it, or if
-	 * (2) we need to inject backup_manifest or recovery configuration into it.
+	 * (2) we need to inject backup_manifest or recovery configuration into
+	 * it.
 	 */
 	must_parse_archive = (format == 'p' || inject_manifest ||
-		(spclocation == NULL && writerecoveryconf));
+						  (spclocation == NULL && writerecoveryconf));
 
 	if (format == 'p')
 	{
@@ -1019,8 +1020,8 @@ CreateBackupStreamer(char *archive_name, char *spclocation,
 		/*
 		 * In tar format, we just write the archive without extracting it.
 		 * Normally, we write it to the archive name provided by the caller,
-		 * but when the base directory is "-" that means we need to write
-		 * to standard output.
+		 * but when the base directory is "-" that means we need to write to
+		 * standard output.
 		 */
 		if (strcmp(basedir, "-") == 0)
 		{
@@ -1060,16 +1061,16 @@ CreateBackupStreamer(char *archive_name, char *spclocation,
 	}
 
 	/*
-	 * If we're supposed to inject the backup manifest into the results,
-	 * it should be done here, so that the file content can be injected
-	 * directly, without worrying about the details of the tar format.
+	 * If we're supposed to inject the backup manifest into the results, it
+	 * should be done here, so that the file content can be injected directly,
+	 * without worrying about the details of the tar format.
 	 */
 	if (inject_manifest)
 		manifest_inject_streamer = streamer;
 
 	/*
-	 * If this is the main tablespace and we're supposed to write
-	 * recovery information, arrange to do that.
+	 * If this is the main tablespace and we're supposed to write recovery
+	 * information, arrange to do that.
 	 */
 	if (spclocation == NULL && writerecoveryconf)
 	{
@@ -1080,11 +1081,10 @@ CreateBackupStreamer(char *archive_name, char *spclocation,
 	}
 
 	/*
-	 * If we're doing anything that involves understanding the contents of
-	 * the archive, we'll need to parse it. If not, we can skip parsing it,
-	 * but old versions of the server send improperly terminated tarfiles,
-	 * so if we're talking to such a server we'll need to add the terminator
-	 * here.
+	 * If we're doing anything that involves understanding the contents of the
+	 * archive, we'll need to parse it. If not, we can skip parsing it, but
+	 * old versions of the server send improperly terminated tarfiles, so if
+	 * we're talking to such a server we'll need to add the terminator here.
 	 */
 	if (must_parse_archive)
 		streamer = bbstreamer_tar_parser_new(streamer);
@@ -1353,26 +1353,26 @@ BaseBackup(void)
 	}
 	if (maxrate > 0)
 		AppendIntegerCommandOption(&buf, use_new_option_syntax, "MAX_RATE",
-									  maxrate);
+								   maxrate);
 	if (format == 't')
 		AppendPlainCommandOption(&buf, use_new_option_syntax, "TABLESPACE_MAP");
 	if (!verify_checksums)
 	{
 		if (use_new_option_syntax)
 			AppendIntegerCommandOption(&buf, use_new_option_syntax,
-										  "VERIFY_CHECKSUMS", 0);
+									   "VERIFY_CHECKSUMS", 0);
 		else
 			AppendPlainCommandOption(&buf, use_new_option_syntax,
-										"NOVERIFY_CHECKSUMS");
+									 "NOVERIFY_CHECKSUMS");
 	}
 
 	if (manifest)
 	{
 		AppendStringCommandOption(&buf, use_new_option_syntax, "MANIFEST",
-									 manifest_force_encode ? "force-encode" : "yes");
+								  manifest_force_encode ? "force-encode" : "yes");
 		if (manifest_checksums != NULL)
 			AppendStringCommandOption(&buf, use_new_option_syntax,
-										 "MANIFEST_CHECKSUMS", manifest_checksums);
+									  "MANIFEST_CHECKSUMS", manifest_checksums);
 	}
 
 	if (verbose)
@@ -1500,8 +1500,8 @@ BaseBackup(void)
 	/* Receive a tar file for each tablespace in turn */
 	for (i = 0; i < PQntuples(res); i++)
 	{
-		char   archive_name[MAXPGPATH];
-		char   *spclocation;
+		char		archive_name[MAXPGPATH];
+		char	   *spclocation;
 
 		/*
 		 * If we write the data out to a tar file, it will be named base.tar

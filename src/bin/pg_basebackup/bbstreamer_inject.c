@@ -24,16 +24,16 @@ typedef struct bbstreamer_recovery_injector
 	bool		found_postgresql_auto_conf;
 	PQExpBuffer recoveryconfcontents;
 	bbstreamer_member member;
-} bbstreamer_recovery_injector;
+}			bbstreamer_recovery_injector;
 
-static void bbstreamer_recovery_injector_content(bbstreamer *streamer,
-												 bbstreamer_member *member,
+static void bbstreamer_recovery_injector_content(bbstreamer * streamer,
+												 bbstreamer_member * member,
 												 const char *data, int len,
 												 bbstreamer_archive_context context);
-static void bbstreamer_recovery_injector_finalize(bbstreamer *streamer);
-static void bbstreamer_recovery_injector_free(bbstreamer *streamer);
+static void bbstreamer_recovery_injector_finalize(bbstreamer * streamer);
+static void bbstreamer_recovery_injector_free(bbstreamer * streamer);
 
-const bbstreamer_ops bbstreamer_recovery_injector_ops = {
+const		bbstreamer_ops bbstreamer_recovery_injector_ops = {
 	.content = bbstreamer_recovery_injector_content,
 	.finalize = bbstreamer_recovery_injector_finalize,
 	.free = bbstreamer_recovery_injector_free
@@ -62,14 +62,14 @@ const bbstreamer_ops bbstreamer_recovery_injector_ops = {
  * the archive.
  */
 extern bbstreamer *
-bbstreamer_recovery_injector_new(bbstreamer *next,
+bbstreamer_recovery_injector_new(bbstreamer * next,
 								 bool is_recovery_guc_supported,
 								 PQExpBuffer recoveryconfcontents)
 {
 	bbstreamer_recovery_injector *streamer;
 
 	streamer = palloc0(sizeof(bbstreamer_recovery_injector));
-	*((const bbstreamer_ops **) &streamer->base.bbs_ops) =
+	*((const bbstreamer_ops * *) &streamer->base.bbs_ops) =
 		&bbstreamer_recovery_injector_ops;
 	streamer->base.bbs_next = next;
 	streamer->is_recovery_guc_supported = is_recovery_guc_supported;
@@ -82,8 +82,8 @@ bbstreamer_recovery_injector_new(bbstreamer *next,
  * Handle each chunk of tar content while injecting recovery configuration.
  */
 static void
-bbstreamer_recovery_injector_content(bbstreamer *streamer,
-									 bbstreamer_member *member,
+bbstreamer_recovery_injector_content(bbstreamer * streamer,
+									 bbstreamer_member * member,
 									 const char *data, int len,
 									 bbstreamer_archive_context context)
 {
@@ -198,7 +198,7 @@ bbstreamer_recovery_injector_content(bbstreamer *streamer,
  * End-of-stream processing for this bbstreamer.
  */
 static void
-bbstreamer_recovery_injector_finalize(bbstreamer *streamer)
+bbstreamer_recovery_injector_finalize(bbstreamer * streamer)
 {
 	bbstreamer_finalize(streamer->bbs_next);
 }
@@ -207,7 +207,7 @@ bbstreamer_recovery_injector_finalize(bbstreamer *streamer)
  * Free memory associated with this bbstreamer.
  */
 static void
-bbstreamer_recovery_injector_free(bbstreamer *streamer)
+bbstreamer_recovery_injector_free(bbstreamer * streamer)
 {
 	bbstreamer_free(streamer->bbs_next);
 	pfree(streamer);
@@ -217,7 +217,7 @@ bbstreamer_recovery_injector_free(bbstreamer *streamer)
  * Inject a member into the archive with specified contents.
  */
 void
-bbstreamer_inject_file(bbstreamer *streamer, char *pathname, char *data,
+bbstreamer_inject_file(bbstreamer * streamer, char *pathname, char *data,
 					   int len)
 {
 	bbstreamer_member member;

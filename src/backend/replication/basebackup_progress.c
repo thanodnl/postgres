@@ -39,11 +39,11 @@
 #include "storage/latch.h"
 #include "utils/timestamp.h"
 
-static void bbsink_progress_begin_backup(bbsink *sink);
-static void bbsink_progress_archive_contents(bbsink *sink, size_t len);
-static void bbsink_progress_end_archive(bbsink *sink);
+static void bbsink_progress_begin_backup(bbsink * sink);
+static void bbsink_progress_archive_contents(bbsink * sink, size_t len);
+static void bbsink_progress_end_archive(bbsink * sink);
 
-const bbsink_ops bbsink_progress_ops = {
+const		bbsink_ops bbsink_progress_ops = {
 	.begin_backup = bbsink_progress_begin_backup,
 	.begin_archive = bbsink_forward_begin_archive,
 	.archive_contents = bbsink_progress_archive_contents,
@@ -60,14 +60,14 @@ const bbsink_ops bbsink_progress_ops = {
  * forwards data to a successor sink.
  */
 bbsink *
-bbsink_progress_new(bbsink *next, bool estimate_backup_size)
+bbsink_progress_new(bbsink * next, bool estimate_backup_size)
 {
 	bbsink	   *sink;
 
 	Assert(next != NULL);
 
 	sink = palloc0(sizeof(bbsink));
-	*((const bbsink_ops **) &sink->bbs_ops) = &bbsink_progress_ops;
+	*((const bbsink_ops * *) &sink->bbs_ops) = &bbsink_progress_ops;
 	sink->bbs_next = next;
 
 	/*
@@ -85,7 +85,7 @@ bbsink_progress_new(bbsink *next, bool estimate_backup_size)
  * Progress reporting at start of backup.
  */
 static void
-bbsink_progress_begin_backup(bbsink *sink)
+bbsink_progress_begin_backup(bbsink * sink)
 {
 	const int	index[] = {
 		PROGRESS_BASEBACKUP_PHASE,
@@ -115,7 +115,7 @@ bbsink_progress_begin_backup(bbsink *sink)
  * End-of archive progress reporting.
  */
 static void
-bbsink_progress_end_archive(bbsink *sink)
+bbsink_progress_end_archive(bbsink * sink)
 {
 	/*
 	 * We expect one archive per tablespace, so reaching the end of an archive
@@ -151,7 +151,7 @@ bbsink_progress_end_archive(bbsink *sink)
  * pg_stat_progress_basebackup.
  */
 static void
-bbsink_progress_archive_contents(bbsink *sink, size_t len)
+bbsink_progress_archive_contents(bbsink * sink, size_t len)
 {
 	bbsink_state *state = sink->bbs_state;
 	const int	index[] = {
@@ -207,7 +207,7 @@ basebackup_progress_estimate_backup_size(void)
  * Advertise that we are waiting for WAL archiving at end-of-backup.
  */
 void
-basebackup_progress_wait_wal_archive(bbsink_state *state)
+basebackup_progress_wait_wal_archive(bbsink_state * state)
 {
 	const int	index[] = {
 		PROGRESS_BASEBACKUP_PHASE,

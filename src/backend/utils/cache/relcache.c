@@ -5081,7 +5081,7 @@ RelationGetIndexAttrBitmap(Relation relation, IndexAttrBitmapKind attrKind)
 	Bitmapset  *uindexattrs;	/* columns in unique indexes */
 	Bitmapset  *pkindexattrs;	/* columns in the primary index */
 	Bitmapset  *idindexattrs;	/* columns in the replica identity */
-	Bitmapset  *hotblockingattrs;   /* columns with HOT blocking indexes */
+	Bitmapset  *hotblockingattrs;	/* columns with HOT blocking indexes */
 	List	   *indexoidlist;
 	List	   *newindexoidlist;
 	Oid			relpkindex;
@@ -5211,7 +5211,7 @@ restart:
 			{
 				if (indexDesc->rd_indam->amhotblocking)
 					hotblockingattrs = bms_add_member(hotblockingattrs,
-												 attrnum - FirstLowInvalidHeapAttributeNumber);
+													  attrnum - FirstLowInvalidHeapAttributeNumber);
 
 				if (isKey && i < indexDesc->rd_index->indnkeyatts)
 					uindexattrs = bms_add_member(uindexattrs,
@@ -5232,9 +5232,9 @@ restart:
 			pull_varattnos(indexExpressions, 1, &hotblockingattrs);
 
 		/*
-		 * Collect all attributes in the index predicate, too. We have to ignore
-		 * amhotblocking flag, because the row might become indexable, in which
-		 * case we have to add it to the index.
+		 * Collect all attributes in the index predicate, too. We have to
+		 * ignore amhotblocking flag, because the row might become indexable,
+		 * in which case we have to add it to the index.
 		 */
 		pull_varattnos(indexPredicate, 1, &hotblockingattrs);
 
@@ -5282,9 +5282,8 @@ restart:
 	/*
 	 * Now save copies of the bitmaps in the relcache entry.  We intentionally
 	 * set rd_attrsvalid last, because that's what signals validity of the
-	 * values; if we run out of memory before making that copy, we won't
-	 * leave the relcache entry looking like the other ones are valid but
-	 * empty.
+	 * values; if we run out of memory before making that copy, we won't leave
+	 * the relcache entry looking like the other ones are valid but empty.
 	 */
 	oldcxt = MemoryContextSwitchTo(CacheMemoryContext);
 	relation->rd_keyattr = bms_copy(uindexattrs);

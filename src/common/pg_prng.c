@@ -45,7 +45,7 @@ rotl(uint64 x, int bits)
  * Note: the state vector must not be all-zeroes, as that is a fixed point.
  */
 static uint64
-xoroshiro128ss(pg_prng_state *state)
+xoroshiro128ss(pg_prng_state * state)
 {
 	uint64		s0 = state->s0,
 				sx = state->s1 ^ s0,
@@ -80,7 +80,7 @@ splitmix64(uint64 *state)
  * taking care that we don't produce all-zeroes.
  */
 void
-pg_prng_seed(pg_prng_state *state, uint64 seed)
+pg_prng_seed(pg_prng_state * state, uint64 seed)
 {
 	state->s0 = splitmix64(&seed);
 	state->s1 = splitmix64(&seed);
@@ -93,7 +93,7 @@ pg_prng_seed(pg_prng_state *state, uint64 seed)
  * taking care that we don't produce all-zeroes.
  */
 void
-pg_prng_fseed(pg_prng_state *state, double fseed)
+pg_prng_fseed(pg_prng_state * state, double fseed)
 {
 	/* Assume there's about 52 mantissa bits; the sign contributes too. */
 	int64		seed = ((double) ((UINT64CONST(1) << 52) - 1)) * fseed;
@@ -105,7 +105,7 @@ pg_prng_fseed(pg_prng_state *state, double fseed)
  * Validate a PRNG seed value.
  */
 bool
-pg_prng_seed_check(pg_prng_state *state)
+pg_prng_seed_check(pg_prng_state * state)
 {
 	/*
 	 * If the seeding mechanism chanced to produce all-zeroes, insert
@@ -125,7 +125,7 @@ pg_prng_seed_check(pg_prng_state *state)
  * Select a random uint64 uniformly from the range [0, PG_UINT64_MAX].
  */
 uint64
-pg_prng_uint64(pg_prng_state *state)
+pg_prng_uint64(pg_prng_state * state)
 {
 	return xoroshiro128ss(state);
 }
@@ -135,7 +135,7 @@ pg_prng_uint64(pg_prng_state *state)
  * If the range is empty, rmin is always produced.
  */
 uint64
-pg_prng_uint64_range(pg_prng_state *state, uint64 rmin, uint64 rmax)
+pg_prng_uint64_range(pg_prng_state * state, uint64 rmin, uint64 rmax)
 {
 	uint64		val;
 
@@ -164,7 +164,7 @@ pg_prng_uint64_range(pg_prng_state *state, uint64 rmin, uint64 rmax)
  * Select a random int64 uniformly from the range [PG_INT64_MIN, PG_INT64_MAX].
  */
 int64
-pg_prng_int64(pg_prng_state *state)
+pg_prng_int64(pg_prng_state * state)
 {
 	return (int64) xoroshiro128ss(state);
 }
@@ -173,7 +173,7 @@ pg_prng_int64(pg_prng_state *state)
  * Select a random int64 uniformly from the range [0, PG_INT64_MAX].
  */
 int64
-pg_prng_int64p(pg_prng_state *state)
+pg_prng_int64p(pg_prng_state * state)
 {
 	return (int64) (xoroshiro128ss(state) & UINT64CONST(0x7FFFFFFFFFFFFFFF));
 }
@@ -182,7 +182,7 @@ pg_prng_int64p(pg_prng_state *state)
  * Select a random uint32 uniformly from the range [0, PG_UINT32_MAX].
  */
 uint32
-pg_prng_uint32(pg_prng_state *state)
+pg_prng_uint32(pg_prng_state * state)
 {
 	/*
 	 * Although xoroshiro128** is not known to have any weaknesses in
@@ -198,7 +198,7 @@ pg_prng_uint32(pg_prng_state *state)
  * Select a random int32 uniformly from the range [PG_INT32_MIN, PG_INT32_MAX].
  */
 int32
-pg_prng_int32(pg_prng_state *state)
+pg_prng_int32(pg_prng_state * state)
 {
 	uint64		v = xoroshiro128ss(state);
 
@@ -209,7 +209,7 @@ pg_prng_int32(pg_prng_state *state)
  * Select a random int32 uniformly from the range [0, PG_INT32_MAX].
  */
 int32
-pg_prng_int32p(pg_prng_state *state)
+pg_prng_int32p(pg_prng_state * state)
 {
 	uint64		v = xoroshiro128ss(state);
 
@@ -223,7 +223,7 @@ pg_prng_int32p(pg_prng_state *state)
  * to get that is "1.0 - pg_prng_double(state)".
  */
 double
-pg_prng_double(pg_prng_state *state)
+pg_prng_double(pg_prng_state * state)
 {
 	uint64		v = xoroshiro128ss(state);
 
@@ -239,7 +239,7 @@ pg_prng_double(pg_prng_state *state)
  * Select a random boolean value.
  */
 bool
-pg_prng_bool(pg_prng_state *state)
+pg_prng_bool(pg_prng_state * state)
 {
 	uint64		v = xoroshiro128ss(state);
 

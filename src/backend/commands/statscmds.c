@@ -261,9 +261,9 @@ CreateStatistics(CreateStatsStmt *stmt)
 			nattnums++;
 			ReleaseSysCache(atttuple);
 		}
-		else if (IsA(selem->expr, Var))	/* column reference in parens */
+		else if (IsA(selem->expr, Var)) /* column reference in parens */
 		{
-			Var *var = (Var *) selem->expr;
+			Var		   *var = (Var *) selem->expr;
 			TypeCacheEntry *type;
 
 			/* Disallow use of system attributes in extended stats */
@@ -300,10 +300,11 @@ CreateStatistics(CreateStatsStmt *stmt)
 			while ((k = bms_next_member(attnums, k)) >= 0)
 			{
 				AttrNumber	attnum = k + FirstLowInvalidHeapAttributeNumber;
+
 				if (attnum <= 0)
 					ereport(ERROR,
-						(errcode(ERRCODE_FEATURE_NOT_SUPPORTED),
-						 errmsg("statistics creation on system columns is not supported")));
+							(errcode(ERRCODE_FEATURE_NOT_SUPPORTED),
+							 errmsg("statistics creation on system columns is not supported")));
 			}
 
 			/*

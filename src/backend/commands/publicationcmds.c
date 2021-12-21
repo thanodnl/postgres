@@ -813,7 +813,7 @@ RemovePublicationById(Oid pubid)
 	if (!HeapTupleIsValid(tup))
 		elog(ERROR, "cache lookup failed for publication %u", pubid);
 
-	pubform = (Form_pg_publication)GETSTRUCT(tup);
+	pubform = (Form_pg_publication) GETSTRUCT(tup);
 
 	/* Invalidate relcache so that publication info is rebuilt. */
 	if (pubform->puballtables)

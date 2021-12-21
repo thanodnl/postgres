@@ -1529,8 +1529,8 @@ finish_heap_swap(Oid OIDOldHeap, Oid OIDNewHeap,
 
 			/*
 			 * Reset the relrewrite for the toast. The command-counter
-			 * increment is required here as we are about to update
-			 * the tuple that is updated as part of RenameRelationInternal.
+			 * increment is required here as we are about to update the tuple
+			 * that is updated as part of RenameRelationInternal.
 			 */
 			CommandCounterIncrement();
 			ResetRelRewrite(newrel->rd_rel->reltoastrelid);

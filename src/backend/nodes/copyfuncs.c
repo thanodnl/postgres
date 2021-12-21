@@ -4929,9 +4929,9 @@ _copyExtensibleNode(const ExtensibleNode *from)
  * ****************************************************************
  */
 static Integer *
-_copyInteger(const Integer *from)
+_copyInteger(const Integer * from)
 {
-	Integer	   *newnode = makeNode(Integer);
+	Integer    *newnode = makeNode(Integer);
 
 	COPY_SCALAR_FIELD(val);
 
@@ -4939,7 +4939,7 @@ _copyInteger(const Integer *from)
 }
 
 static Float *
-_copyFloat(const Float *from)
+_copyFloat(const Float * from)
 {
 	Float	   *newnode = makeNode(Float);
 
@@ -4949,7 +4949,7 @@ _copyFloat(const Float *from)
 }
 
 static String *
-_copyString(const String *from)
+_copyString(const String * from)
 {
 	String	   *newnode = makeNode(String);
 
@@ -4959,9 +4959,9 @@ _copyString(const String *from)
 }
 
 static BitString *
-_copyBitString(const BitString *from)
+_copyBitString(const BitString * from)
 {
-	BitString   *newnode = makeNode(BitString);
+	BitString  *newnode = makeNode(BitString);
 
 	COPY_STRING_FIELD(val);
 

@@ -34,49 +34,49 @@ typedef struct bbstreamer_tar_parser
 	bbstreamer_member member;
 	size_t		file_bytes_sent;
 	size_t		pad_bytes_expected;
-} bbstreamer_tar_parser;
+}			bbstreamer_tar_parser;
 
 typedef struct bbstreamer_tar_archiver
 {
 	bbstreamer	base;
 	bool		rearchive_member;
-} bbstreamer_tar_archiver;
+}			bbstreamer_tar_archiver;
 
-static void bbstreamer_tar_parser_content(bbstreamer *streamer,
-										  bbstreamer_member *member,
+static void bbstreamer_tar_parser_content(bbstreamer * streamer,
+										  bbstreamer_member * member,
 										  const char *data, int len,
 										  bbstreamer_archive_context context);
-static void bbstreamer_tar_parser_finalize(bbstreamer *streamer);
-static void bbstreamer_tar_parser_free(bbstreamer *streamer);
-static bool bbstreamer_tar_header(bbstreamer_tar_parser *mystreamer);
+static void bbstreamer_tar_parser_finalize(bbstreamer * streamer);
+static void bbstreamer_tar_parser_free(bbstreamer * streamer);
+static bool bbstreamer_tar_header(bbstreamer_tar_parser * mystreamer);
 
-const bbstreamer_ops bbstreamer_tar_parser_ops = {
+const		bbstreamer_ops bbstreamer_tar_parser_ops = {
 	.content = bbstreamer_tar_parser_content,
 	.finalize = bbstreamer_tar_parser_finalize,
 	.free = bbstreamer_tar_parser_free
 };
 
-static void bbstreamer_tar_archiver_content(bbstreamer *streamer,
-											bbstreamer_member *member,
+static void bbstreamer_tar_archiver_content(bbstreamer * streamer,
+											bbstreamer_member * member,
 											const char *data, int len,
 											bbstreamer_archive_context context);
-static void bbstreamer_tar_archiver_finalize(bbstreamer *streamer);
-static void bbstreamer_tar_archiver_free(bbstreamer *streamer);
+static void bbstreamer_tar_archiver_finalize(bbstreamer * streamer);
+static void bbstreamer_tar_archiver_free(bbstreamer * streamer);
 
-const bbstreamer_ops bbstreamer_tar_archiver_ops = {
+const		bbstreamer_ops bbstreamer_tar_archiver_ops = {
 	.content = bbstreamer_tar_archiver_content,
 	.finalize = bbstreamer_tar_archiver_finalize,
 	.free = bbstreamer_tar_archiver_free
 };
 
-static void bbstreamer_tar_terminator_content(bbstreamer *streamer,
-											  bbstreamer_member *member,
+static void bbstreamer_tar_terminator_content(bbstreamer * streamer,
+											  bbstreamer_member * member,
 											  const char *data, int len,
 											  bbstreamer_archive_context context);
-static void bbstreamer_tar_terminator_finalize(bbstreamer *streamer);
-static void bbstreamer_tar_terminator_free(bbstreamer *streamer);
+static void bbstreamer_tar_terminator_finalize(bbstreamer * streamer);
+static void bbstreamer_tar_terminator_free(bbstreamer * streamer);
 
-const bbstreamer_ops bbstreamer_tar_terminator_ops = {
+const		bbstreamer_ops bbstreamer_tar_terminator_ops = {
 	.content = bbstreamer_tar_terminator_content,
 	.finalize = bbstreamer_tar_terminator_finalize,
 	.free = bbstreamer_tar_terminator_free
@@ -90,12 +90,12 @@ const bbstreamer_ops bbstreamer_tar_terminator_ops = {
  * conventions described in bbstreamer.h.
  */
 extern bbstreamer *
-bbstreamer_tar_parser_new(bbstreamer *next)
+bbstreamer_tar_parser_new(bbstreamer * next)
 {
 	bbstreamer_tar_parser *streamer;
 
 	streamer = palloc0(sizeof(bbstreamer_tar_parser));
-	*((const bbstreamer_ops **) &streamer->base.bbs_ops) =
+	*((const bbstreamer_ops * *) &streamer->base.bbs_ops) =
 		&bbstreamer_tar_parser_ops;
 	streamer->base.bbs_next = next;
 	initStringInfo(&streamer->base.bbs_buffer);
@@ -108,7 +108,7 @@ bbstreamer_tar_parser_new(bbstreamer *next)
  * Parse unknown content as tar data.
  */
 static void
-bbstreamer_tar_parser_content(bbstreamer *streamer, bbstreamer_member *member,
+bbstreamer_tar_parser_content(bbstreamer * streamer, bbstreamer_member * member,
 							  const char *data, int len,
 							  bbstreamer_archive_context context)
 {
@@ -262,7 +262,7 @@ bbstreamer_tar_parser_content(bbstreamer *streamer, bbstreamer_member *member,
  * next bbstreamer; it is false if we have reached the archive trailer.
  */
 static bool
-bbstreamer_tar_header(bbstreamer_tar_parser *mystreamer)
+bbstreamer_tar_header(bbstreamer_tar_parser * mystreamer)
 {
 	bool		has_nonzero_byte = false;
 	int			i;
@@ -325,7 +325,7 @@ bbstreamer_tar_header(bbstreamer_tar_parser *mystreamer)
  * End-of-stream processing for a tar parser.
  */
 static void
-bbstreamer_tar_parser_finalize(bbstreamer *streamer)
+bbstreamer_tar_parser_finalize(bbstreamer * streamer)
 {
 	bbstreamer_tar_parser *mystreamer = (bbstreamer_tar_parser *) streamer;
 
@@ -350,7 +350,7 @@ bbstreamer_tar_parser_finalize(bbstreamer *streamer)
  * Free memory associated with a tar parser.
  */
 static void
-bbstreamer_tar_parser_free(bbstreamer *streamer)
+bbstreamer_tar_parser_free(bbstreamer * streamer)
 {
 	pfree(streamer->bbs_buffer.data);
 	bbstreamer_free(streamer->bbs_next);
@@ -365,12 +365,12 @@ bbstreamer_tar_parser_free(bbstreamer *streamer)
  * bbstreamer_tar_parser_content.
  */
 extern bbstreamer *
-bbstreamer_tar_archiver_new(bbstreamer *next)
+bbstreamer_tar_archiver_new(bbstreamer * next)
 {
 	bbstreamer_tar_archiver *streamer;
 
 	streamer = palloc0(sizeof(bbstreamer_tar_archiver));
-	*((const bbstreamer_ops **) &streamer->base.bbs_ops) =
+	*((const bbstreamer_ops * *) &streamer->base.bbs_ops) =
 		&bbstreamer_tar_archiver_ops;
 	streamer->base.bbs_next = next;
 
@@ -399,8 +399,8 @@ bbstreamer_tar_archiver_new(bbstreamer *next)
  * present, one will be added by bbstreamer_tar_parser_finalize.
  */
 static void
-bbstreamer_tar_archiver_content(bbstreamer *streamer,
-								bbstreamer_member *member,
+bbstreamer_tar_archiver_content(bbstreamer * streamer,
+								bbstreamer_member * member,
 								const char *data, int len,
 								bbstreamer_archive_context context)
 {
@@ -451,7 +451,7 @@ bbstreamer_tar_archiver_content(bbstreamer *streamer,
  * End-of-stream processing for a tar archiver.
  */
 static void
-bbstreamer_tar_archiver_finalize(bbstreamer *streamer)
+bbstreamer_tar_archiver_finalize(bbstreamer * streamer)
 {
 	bbstreamer_finalize(streamer->bbs_next);
 }
@@ -460,7 +460,7 @@ bbstreamer_tar_archiver_finalize(bbstreamer *streamer)
  * Free memory associated with a tar archiver.
  */
 static void
-bbstreamer_tar_archiver_free(bbstreamer *streamer)
+bbstreamer_tar_archiver_free(bbstreamer * streamer)
 {
 	bbstreamer_free(streamer->bbs_next);
 	pfree(streamer);
@@ -471,12 +471,12 @@ bbstreamer_tar_archiver_free(bbstreamer *streamer)
  * end of an incomplete tarfile that the server might send us.
  */
 bbstreamer *
-bbstreamer_tar_terminator_new(bbstreamer *next)
+bbstreamer_tar_terminator_new(bbstreamer * next)
 {
 	bbstreamer *streamer;
 
 	streamer = palloc0(sizeof(bbstreamer));
-	*((const bbstreamer_ops **) &streamer->bbs_ops) =
+	*((const bbstreamer_ops * *) &streamer->bbs_ops) =
 		&bbstreamer_tar_terminator_ops;
 	streamer->bbs_next = next;
 
@@ -487,8 +487,8 @@ bbstreamer_tar_terminator_new(bbstreamer *next)
  * Pass all the content through without change.
  */
 static void
-bbstreamer_tar_terminator_content(bbstreamer *streamer,
-								  bbstreamer_member *member,
+bbstreamer_tar_terminator_content(bbstreamer * streamer,
+								  bbstreamer_member * member,
 								  const char *data, int len,
 								  bbstreamer_archive_context context)
 {
@@ -505,7 +505,7 @@ bbstreamer_tar_terminator_content(bbstreamer *streamer,
  * to supply.
  */
 static void
-bbstreamer_tar_terminator_finalize(bbstreamer *streamer)
+bbstreamer_tar_terminator_finalize(bbstreamer * streamer)
 {
 	char		buffer[2 * TAR_BLOCK_SIZE];
 
@@ -519,7 +519,7 @@ bbstreamer_tar_terminator_finalize(bbstreamer *streamer)
  * Free memory associated with a tar terminator.
  */
 static void
-bbstreamer_tar_terminator_free(bbstreamer *streamer)
+bbstreamer_tar_terminator_free(bbstreamer * streamer)
 {
 	bbstreamer_free(streamer->bbs_next);
 	pfree(streamer);

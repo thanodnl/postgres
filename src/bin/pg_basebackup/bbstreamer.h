@@ -56,7 +56,7 @@ typedef enum
 	BBSTREAMER_MEMBER_CONTENTS,
 	BBSTREAMER_MEMBER_TRAILER,
 	BBSTREAMER_ARCHIVE_TRAILER
-} bbstreamer_archive_context;
+}			bbstreamer_archive_context;
 
 /*
  * Each chunk of data that is classified as BBSTREAMER_MEMBER_HEADER,
@@ -76,7 +76,7 @@ typedef struct
 	bool		is_directory;
 	bool		is_link;
 	char		linktarget[MAXPGPATH];
-} bbstreamer_member;
+}			bbstreamer_member;
 
 /*
  * Generally, each type of bbstreamer will define its own struct, but the
@@ -96,7 +96,7 @@ typedef struct
  */
 struct bbstreamer
 {
-	const bbstreamer_ops *bbs_ops;
+	const		bbstreamer_ops *bbs_ops;
 	bbstreamer *bbs_next;
 	StringInfoData bbs_buffer;
 };
@@ -113,16 +113,16 @@ struct bbstreamer
  */
 struct bbstreamer_ops
 {
-	void		(*content) (bbstreamer *streamer, bbstreamer_member *member,
+	void		(*content) (bbstreamer * streamer, bbstreamer_member * member,
 							const char *data, int len,
 							bbstreamer_archive_context context);
-	void		(*finalize) (bbstreamer *streamer);
-	void		(*free) (bbstreamer *streamer);
+	void		(*finalize) (bbstreamer * streamer);
+	void		(*free) (bbstreamer * streamer);
 };
 
 /* Send some content to a bbstreamer. */
 static inline void
-bbstreamer_content(bbstreamer *streamer, bbstreamer_member *member,
+bbstreamer_content(bbstreamer * streamer, bbstreamer_member * member,
 				   const char *data, int len,
 				   bbstreamer_archive_context context)
 {
@@ -132,7 +132,7 @@ bbstreamer_content(bbstreamer *streamer, bbstreamer_member *member,
 
 /* Finalize a bbstreamer. */
 static inline void
-bbstreamer_finalize(bbstreamer *streamer)
+bbstreamer_finalize(bbstreamer * streamer)
 {
 	Assert(streamer != NULL);
 	streamer->bbs_ops->finalize(streamer);
@@ -140,7 +140,7 @@ bbstreamer_finalize(bbstreamer *streamer)
 
 /* Free a bbstreamer. */
 static inline void
-bbstreamer_free(bbstreamer *streamer)
+bbstreamer_free(bbstreamer * streamer)
 {
 	Assert(streamer != NULL);
 	streamer->bbs_ops->free(streamer);
@@ -153,7 +153,7 @@ bbstreamer_free(bbstreamer *streamer)
  * accordingly.
  */
 static inline void
-bbstreamer_buffer_bytes(bbstreamer *streamer, const char **data, int *len,
+bbstreamer_buffer_bytes(bbstreamer * streamer, const char **data, int *len,
 						int nbytes)
 {
 	Assert(nbytes <= *len);
@@ -171,7 +171,7 @@ bbstreamer_buffer_bytes(bbstreamer *streamer, const char **data, int *len,
  * reached and false otherwise.
  */
 static inline bool
-bbstreamer_buffer_until(bbstreamer *streamer, const char **data, int *len,
+bbstreamer_buffer_until(bbstreamer * streamer, const char **data, int *len,
 						int target_bytes)
 {
 	int			buflen = streamer->bbs_buffer.len;
@@ -198,21 +198,21 @@ bbstreamer_buffer_until(bbstreamer *streamer, const char **data, int *len,
  * Functions for creating bbstreamer objects of various types. See the header
  * comments for each of these functions for details.
  */
-extern bbstreamer *bbstreamer_plain_writer_new(char *pathname, FILE *file);
-extern bbstreamer *bbstreamer_gzip_writer_new(char *pathname, FILE *file,
-											  int compresslevel);
-extern bbstreamer *bbstreamer_extractor_new(const char *basepath,
-											const char *(*link_map) (const char *),
-											void (*report_output_file) (const char *));
+extern bbstreamer * bbstreamer_plain_writer_new(char *pathname, FILE *file);
+extern bbstreamer * bbstreamer_gzip_writer_new(char *pathname, FILE *file,
+											   int compresslevel);
+extern bbstreamer * bbstreamer_extractor_new(const char *basepath,
+											 const char *(*link_map) (const char *),
+											 void (*report_output_file) (const char *));
 
-extern bbstreamer *bbstreamer_tar_parser_new(bbstreamer *next);
-extern bbstreamer *bbstreamer_tar_terminator_new(bbstreamer *next);
-extern bbstreamer *bbstreamer_tar_archiver_new(bbstreamer *next);
+extern bbstreamer * bbstreamer_tar_parser_new(bbstreamer * next);
+extern bbstreamer * bbstreamer_tar_terminator_new(bbstreamer * next);
+extern bbstreamer * bbstreamer_tar_archiver_new(bbstreamer * next);
 
-extern bbstreamer *bbstreamer_recovery_injector_new(bbstreamer *next,
-													bool is_recovery_guc_supported,
-													PQExpBuffer recoveryconfcontents);
-extern void bbstreamer_inject_file(bbstreamer *streamer, char *pathname,
+extern bbstreamer * bbstreamer_recovery_injector_new(bbstreamer * next,
+													 bool is_recovery_guc_supported,
+													 PQExpBuffer recoveryconfcontents);
+extern void bbstreamer_inject_file(bbstreamer * streamer, char *pathname,
 								   char *data, int len);
 
 #endif

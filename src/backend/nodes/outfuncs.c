@@ -3418,27 +3418,27 @@ _outA_Expr(StringInfo str, const A_Expr *node)
 }
 
 static void
-_outInteger(StringInfo str, const Integer *node)
+_outInteger(StringInfo str, const Integer * node)
 {
 	appendStringInfo(str, "%d", node->val);
 }
 
 static void
-_outFloat(StringInfo str, const Float *node)
+_outFloat(StringInfo str, const Float * node)
 {
 	/*
-	 * We assume the value is a valid numeric literal and so does not
-	 * need quoting.
+	 * We assume the value is a valid numeric literal and so does not need
+	 * quoting.
 	 */
 	appendStringInfoString(str, node->val);
 }
 
 static void
-_outString(StringInfo str, const String *node)
+_outString(StringInfo str, const String * node)
 {
 	/*
-	 * We use outToken to provide escaping of the string's content,
-	 * but we don't want it to do anything with an empty string.
+	 * We use outToken to provide escaping of the string's content, but we
+	 * don't want it to do anything with an empty string.
 	 */
 	appendStringInfoChar(str, '"');
 	if (node->val[0] != '\0')
@@ -3447,7 +3447,7 @@ _outString(StringInfo str, const String *node)
 }
 
 static void
-_outBitString(StringInfo str, const BitString *node)
+_outBitString(StringInfo str, const BitString * node)
 {
 	/* internal representation already has leading 'b' */
 	appendStringInfoString(str, node->val);

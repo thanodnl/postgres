@@ -56,7 +56,7 @@
  * this function returns NULL, and prompt_ctx->canceled is set to true.
  */
 char *
-pg_get_line(FILE *stream, PromptInterruptContext *prompt_ctx)
+pg_get_line(FILE *stream, PromptInterruptContext * prompt_ctx)
 {
 	StringInfoData buf;
 
@@ -122,7 +122,7 @@ pg_get_line_buf(FILE *stream, StringInfo buf)
  */
 bool
 pg_get_line_append(FILE *stream, StringInfo buf,
-				   PromptInterruptContext *prompt_ctx)
+				   PromptInterruptContext * prompt_ctx)
 {
 	int			orig_len = buf->len;
 

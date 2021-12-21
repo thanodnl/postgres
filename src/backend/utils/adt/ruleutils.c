@@ -2287,7 +2287,10 @@ pg_get_constraintdef_worker(Oid constraintId, bool fullCommand,
 				if (string)
 					appendStringInfo(&buf, " ON DELETE %s", string);
 
-				/* Add columns specified to SET NULL or SET DEFAULT if provided. */
+				/*
+				 * Add columns specified to SET NULL or SET DEFAULT if
+				 * provided.
+				 */
 				val = SysCacheGetAttr(CONSTROID, tup,
 									  Anum_pg_constraint_confdelsetcols, &isnull);
 				if (!isnull)

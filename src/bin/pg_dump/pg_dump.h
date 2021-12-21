@@ -157,14 +157,14 @@ typedef struct _dumpableAcl
 	/* these fields come from the object's pg_init_privs entry, if any: */
 	char		privtype;		/* entry type, 'i' or 'e'; 0 if no entry */
 	char	   *initprivs;		/* the object's initial ACL string, or NULL */
-} DumpableAcl;
+}			DumpableAcl;
 
 /* Generic struct that can be used to access any object type having an ACL */
 typedef struct _dumpableObjectWithAcl
 {
 	DumpableObject dobj;
 	DumpableAcl dacl;
-} DumpableObjectWithAcl;
+}			DumpableObjectWithAcl;
 
 typedef struct _namespaceInfo
 {

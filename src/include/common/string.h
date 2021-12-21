@@ -18,7 +18,7 @@ typedef struct PromptInterruptContext
 	void	   *jmpbuf;			/* existing longjmp buffer */
 	volatile bool *enabled;		/* flag that enables longjmp-on-interrupt */
 	bool		canceled;		/* indicates whether cancellation occurred */
-} PromptInterruptContext;
+}			PromptInterruptContext;
 
 /* functions in src/common/string.c */
 extern bool pg_str_endswith(const char *str, const char *end);
@@ -29,14 +29,14 @@ extern int	pg_strip_crlf(char *str);
 extern bool pg_is_ascii(const char *str);
 
 /* functions in src/common/pg_get_line.c */
-extern char *pg_get_line(FILE *stream, PromptInterruptContext *prompt_ctx);
+extern char *pg_get_line(FILE *stream, PromptInterruptContext * prompt_ctx);
 extern bool pg_get_line_buf(FILE *stream, struct StringInfoData *buf);
 extern bool pg_get_line_append(FILE *stream, struct StringInfoData *buf,
-							   PromptInterruptContext *prompt_ctx);
+							   PromptInterruptContext * prompt_ctx);
 
 /* functions in src/common/sprompt.c */
 extern char *simple_prompt(const char *prompt, bool echo);
 extern char *simple_prompt_extended(const char *prompt, bool echo,
-									PromptInterruptContext *prompt_ctx);
+									PromptInterruptContext * prompt_ctx);
 
 #endif							/* COMMON_STRING_H */

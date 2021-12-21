@@ -48,7 +48,7 @@ extern void AddWALInfoToBackupManifest(backup_manifest_info *manifest,
 									   TimeLineID starttli, XLogRecPtr endptr,
 									   TimeLineID endtli);
 
-extern void SendBackupManifest(backup_manifest_info *manifest, bbsink *sink);
+extern void SendBackupManifest(backup_manifest_info *manifest, bbsink * sink);
 extern void FreeBackupManifest(backup_manifest_info *manifest);
 
 #endif

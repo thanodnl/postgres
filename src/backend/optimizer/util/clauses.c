@@ -5237,7 +5237,7 @@ pull_paramids_walker(Node *node, Bitmapset **context)
 		return false;
 	if (IsA(node, Param))
 	{
-		Param	   *param = (Param *)node;
+		Param	   *param = (Param *) node;
 
 		*context = bms_add_member(*context, param->paramid);
 		return false;

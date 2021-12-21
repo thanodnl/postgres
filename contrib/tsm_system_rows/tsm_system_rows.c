@@ -69,7 +69,7 @@ static BlockNumber system_rows_nextsampleblock(SampleScanState *node, BlockNumbe
 static OffsetNumber system_rows_nextsampletuple(SampleScanState *node,
 												BlockNumber blockno,
 												OffsetNumber maxoffset);
-static uint32 random_relative_prime(uint32 n, pg_prng_state *randstate);
+static uint32 random_relative_prime(uint32 n, pg_prng_state * randstate);
 
 
 /*
@@ -317,7 +317,7 @@ gcd(uint32 a, uint32 b)
  * (else return 1).
  */
 static uint32
-random_relative_prime(uint32 n, pg_prng_state *randstate)
+random_relative_prime(uint32 n, pg_prng_state * randstate)
 {
 	uint32		r;
 

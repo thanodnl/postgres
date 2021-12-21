@@ -66,23 +66,23 @@ typedef struct
 	pg_checksum_type manifest_checksum_type;
 } basebackup_options;
 
-static int64 sendTablespace(bbsink *sink, char *path, char *oid, bool sizeonly,
+static int64 sendTablespace(bbsink * sink, char *path, char *oid, bool sizeonly,
 							struct backup_manifest_info *manifest);
-static int64 sendDir(bbsink *sink, const char *path, int basepathlen, bool sizeonly,
+static int64 sendDir(bbsink * sink, const char *path, int basepathlen, bool sizeonly,
 					 List *tablespaces, bool sendtblspclinks,
 					 backup_manifest_info *manifest, const char *spcoid);
-static bool sendFile(bbsink *sink, const char *readfilename, const char *tarfilename,
+static bool sendFile(bbsink * sink, const char *readfilename, const char *tarfilename,
 					 struct stat *statbuf, bool missing_ok, Oid dboid,
 					 backup_manifest_info *manifest, const char *spcoid);
-static void sendFileWithContent(bbsink *sink, const char *filename,
+static void sendFileWithContent(bbsink * sink, const char *filename,
 								const char *content,
 								backup_manifest_info *manifest);
-static int64 _tarWriteHeader(bbsink *sink, const char *filename,
+static int64 _tarWriteHeader(bbsink * sink, const char *filename,
 							 const char *linktarget, struct stat *statbuf,
 							 bool sizeonly);
-static void _tarWritePadding(bbsink *sink, int len);
+static void _tarWritePadding(bbsink * sink, int len);
 static void convert_link_to_directory(const char *pathbuf, struct stat *statbuf);
-static void perform_base_backup(basebackup_options *opt, bbsink *sink);
+static void perform_base_backup(basebackup_options *opt, bbsink * sink);
 static void parse_basebackup_options(List *options, basebackup_options *opt);
 static int	compareWalFileNames(const ListCell *a, const ListCell *b);
 static bool is_checksummed_file(const char *fullpath, const char *filename);
@@ -224,7 +224,7 @@ static const struct exclude_list_item noChecksumFiles[] = {
  * clobbered by longjmp" from stupider versions of gcc.
  */
 static void
-perform_base_backup(basebackup_options *opt, bbsink *sink)
+perform_base_backup(basebackup_options *opt, bbsink * sink)
 {
 	bbsink_state state;
 	XLogRecPtr	endptr;
@@ -910,7 +910,7 @@ SendBaseBackup(BaseBackupCmd *cmd)
  * Inject a file with given name and content in the output tar stream.
  */
 static void
-sendFileWithContent(bbsink *sink, const char *filename, const char *content,
+sendFileWithContent(bbsink * sink, const char *filename, const char *content,
 					backup_manifest_info *manifest)
 {
 	struct stat statbuf;
@@ -970,7 +970,7 @@ sendFileWithContent(bbsink *sink, const char *filename, const char *content,
  * Only used to send auxiliary tablespaces, not PGDATA.
  */
 static int64
-sendTablespace(bbsink *sink, char *path, char *spcoid, bool sizeonly,
+sendTablespace(bbsink * sink, char *path, char *spcoid, bool sizeonly,
 			   backup_manifest_info *manifest)
 {
 	int64		size;
@@ -1023,7 +1023,7 @@ sendTablespace(bbsink *sink, char *path, char *spcoid, bool sizeonly,
  * as it will be sent separately in the tablespace_map file.
  */
 static int64
-sendDir(bbsink *sink, const char *path, int basepathlen, bool sizeonly,
+sendDir(bbsink * sink, const char *path, int basepathlen, bool sizeonly,
 		List *tablespaces, bool sendtblspclinks, backup_manifest_info *manifest,
 		const char *spcoid)
 {
@@ -1396,7 +1396,7 @@ is_checksummed_file(const char *fullpath, const char *filename)
  * and the file did not exist.
  */
 static bool
-sendFile(bbsink *sink, const char *readfilename, const char *tarfilename,
+sendFile(bbsink * sink, const char *readfilename, const char *tarfilename,
 		 struct stat *statbuf, bool missing_ok, Oid dboid,
 		 backup_manifest_info *manifest, const char *spcoid)
 {
@@ -1641,7 +1641,7 @@ sendFile(bbsink *sink, const char *readfilename, const char *tarfilename,
 }
 
 static int64
-_tarWriteHeader(bbsink *sink, const char *filename, const char *linktarget,
+_tarWriteHeader(bbsink * sink, const char *filename, const char *linktarget,
 				struct stat *statbuf, bool sizeonly)
 {
 	enum tarError rc;
@@ -1693,7 +1693,7 @@ _tarWriteHeader(bbsink *sink, const char *filename, const char *linktarget,
  * Pad with zero bytes out to a multiple of TAR_BLOCK_SIZE.
  */
 static void
-_tarWritePadding(bbsink *sink, int len)
+_tarWritePadding(bbsink * sink, int len)
 {
 	int			pad = tarPaddingBytesRequired(len);
 

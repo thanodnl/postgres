@@ -71,7 +71,7 @@ typedef struct bbsink_state
 	bool		bytes_total_is_valid;
 	XLogRecPtr	startptr;
 	TimeLineID	starttli;
-} bbsink_state;
+}			bbsink_state;
 
 /*
  * Common data for any type of basebackup sink.
@@ -97,7 +97,7 @@ typedef struct bbsink_state
  */
 struct bbsink
 {
-	const bbsink_ops *bbs_ops;
+	const		bbsink_ops *bbs_ops;
 	char	   *bbs_buffer;
 	size_t		bbs_buffer_length;
 	bbsink	   *bbs_next;
@@ -121,7 +121,7 @@ struct bbsink_ops
 	 * must set bbs_buffer to point to a chunk of storage where at least
 	 * bbs_buffer_length bytes of data can be written.
 	 */
-	void		(*begin_backup) (bbsink *sink);
+	void		(*begin_backup) (bbsink * sink);
 
 	/*
 	 * For each archive transmitted to a bbsink, there will be one call to the
@@ -137,9 +137,9 @@ struct bbsink_ops
 	 * archive_contents() callback is invoked, but it's not worth expending
 	 * extra cycles to make sure it's absolutely 100% full.
 	 */
-	void		(*begin_archive) (bbsink *sink, const char *archive_name);
-	void		(*archive_contents) (bbsink *sink, size_t len);
-	void		(*end_archive) (bbsink *sink);
+	void		(*begin_archive) (bbsink * sink, const char *archive_name);
+	void		(*archive_contents) (bbsink * sink, size_t len);
+	void		(*end_archive) (bbsink * sink);
 
 	/*
 	 * If a backup manifest is to be transmitted to a bbsink, there will be
@@ -150,15 +150,15 @@ struct bbsink_ops
 	 * The rules for invoking the manifest_contents() callback are the same as
 	 * for the archive_contents() callback above.
 	 */
-	void		(*begin_manifest) (bbsink *sink);
-	void		(*manifest_contents) (bbsink *sink, size_t len);
-	void		(*end_manifest) (bbsink *sink);
+	void		(*begin_manifest) (bbsink * sink);
+	void		(*manifest_contents) (bbsink * sink, size_t len);
+	void		(*end_manifest) (bbsink * sink);
 
 	/*
 	 * This callback is invoked just once, after all archives and the manifest
 	 * have been sent.
 	 */
-	void		(*end_backup) (bbsink *sink, XLogRecPtr endptr, TimeLineID endtli);
+	void		(*end_backup) (bbsink * sink, XLogRecPtr endptr, TimeLineID endtli);
 
 	/*
 	 * If a backup is aborted by an error, this callback is invoked before the
@@ -166,12 +166,12 @@ struct bbsink_ops
 	 * would not be released automatically. If no error occurs, this callback
 	 * is invoked after the end_backup callback.
 	 */
-	void		(*cleanup) (bbsink *sink);
+	void		(*cleanup) (bbsink * sink);
 };
 
 /* Begin a backup. */
 static inline void
-bbsink_begin_backup(bbsink *sink, bbsink_state *state, int buffer_length)
+bbsink_begin_backup(bbsink * sink, bbsink_state * state, int buffer_length)
 {
 	Assert(sink != NULL);
 
@@ -187,7 +187,7 @@ bbsink_begin_backup(bbsink *sink, bbsink_state *state, int buffer_length)
 
 /* Begin an archive. */
 static inline void
-bbsink_begin_archive(bbsink *sink, const char *archive_name)
+bbsink_begin_archive(bbsink * sink, const char *archive_name)
 {
 	Assert(sink != NULL);
 
@@ -196,7 +196,7 @@ bbsink_begin_archive(bbsink *sink, const char *archive_name)
 
 /* Process some of the contents of an archive. */
 static inline void
-bbsink_archive_contents(bbsink *sink, size_t len)
+bbsink_archive_contents(bbsink * sink, size_t len)
 {
 	Assert(sink != NULL);
 
@@ -212,7 +212,7 @@ bbsink_archive_contents(bbsink *sink, size_t len)
 
 /* Finish an archive. */
 static inline void
-bbsink_end_archive(bbsink *sink)
+bbsink_end_archive(bbsink * sink)
 {
 	Assert(sink != NULL);
 
@@ -221,7 +221,7 @@ bbsink_end_archive(bbsink *sink)
 
 /* Begin the backup manifest. */
 static inline void
-bbsink_begin_manifest(bbsink *sink)
+bbsink_begin_manifest(bbsink * sink)
 {
 	Assert(sink != NULL);
 
@@ -230,7 +230,7 @@ bbsink_begin_manifest(bbsink *sink)
 
 /* Process some of the manifest contents. */
 static inline void
-bbsink_manifest_contents(bbsink *sink, size_t len)
+bbsink_manifest_contents(bbsink * sink, size_t len)
 {
 	Assert(sink != NULL);
 
@@ -242,7 +242,7 @@ bbsink_manifest_contents(bbsink *sink, size_t len)
 
 /* Finish the backup manifest. */
 static inline void
-bbsink_end_manifest(bbsink *sink)
+bbsink_end_manifest(bbsink * sink)
 {
 	Assert(sink != NULL);
 
@@ -251,7 +251,7 @@ bbsink_end_manifest(bbsink *sink)
 
 /* Finish a backup. */
 static inline void
-bbsink_end_backup(bbsink *sink, XLogRecPtr endptr, TimeLineID endtli)
+bbsink_end_backup(bbsink * sink, XLogRecPtr endptr, TimeLineID endtli)
 {
 	Assert(sink != NULL);
 	Assert(sink->bbs_state->tablespace_num == list_length(sink->bbs_state->tablespaces));
@@ -261,7 +261,7 @@ bbsink_end_backup(bbsink *sink, XLogRecPtr endptr, TimeLineID endtli)
 
 /* Release resources before destruction. */
 static inline void
-bbsink_cleanup(bbsink *sink)
+bbsink_cleanup(bbsink * sink)
 {
 	Assert(sink != NULL);
 
@@ -269,22 +269,22 @@ bbsink_cleanup(bbsink *sink)
 }
 
 /* Forwarding callbacks. Use these to pass operations through to next sink. */
-extern void bbsink_forward_begin_backup(bbsink *sink);
-extern void bbsink_forward_begin_archive(bbsink *sink,
+extern void bbsink_forward_begin_backup(bbsink * sink);
+extern void bbsink_forward_begin_archive(bbsink * sink,
 										 const char *archive_name);
-extern void bbsink_forward_archive_contents(bbsink *sink, size_t len);
-extern void bbsink_forward_end_archive(bbsink *sink);
-extern void bbsink_forward_begin_manifest(bbsink *sink);
-extern void bbsink_forward_manifest_contents(bbsink *sink, size_t len);
-extern void bbsink_forward_end_manifest(bbsink *sink);
-extern void bbsink_forward_end_backup(bbsink *sink, XLogRecPtr endptr,
+extern void bbsink_forward_archive_contents(bbsink * sink, size_t len);
+extern void bbsink_forward_end_archive(bbsink * sink);
+extern void bbsink_forward_begin_manifest(bbsink * sink);
+extern void bbsink_forward_manifest_contents(bbsink * sink, size_t len);
+extern void bbsink_forward_end_manifest(bbsink * sink);
+extern void bbsink_forward_end_backup(bbsink * sink, XLogRecPtr endptr,
 									  TimeLineID endtli);
-extern void bbsink_forward_cleanup(bbsink *sink);
+extern void bbsink_forward_cleanup(bbsink * sink);
 
 /* Constructors for various types of sinks. */
-extern bbsink *bbsink_copytblspc_new(void);
-extern bbsink *bbsink_progress_new(bbsink *next, bool estimate_backup_size);
-extern bbsink *bbsink_throttle_new(bbsink *next, uint32 maxrate);
+extern bbsink * bbsink_copytblspc_new(void);
+extern bbsink * bbsink_progress_new(bbsink * next, bool estimate_backup_size);
+extern bbsink * bbsink_throttle_new(bbsink * next, uint32 maxrate);
 
 /* Extra interface functions for progress reporting. */
 extern void basebackup_progress_wait_checkpoint(void);

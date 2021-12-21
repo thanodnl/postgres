@@ -2654,7 +2654,7 @@ multirange_unnest(PG_FUNCTION_ARGS)
 		MultirangeType *mr;
 		TypeCacheEntry *typcache;
 		int			index;
-	} multirange_unnest_fctx;
+	}			multirange_unnest_fctx;
 
 	FuncCallContext *funcctx;
 	multirange_unnest_fctx *fctx;

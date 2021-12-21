@@ -25,7 +25,7 @@ typedef struct NtDllRoutine
 {
 	const char *name;
 	pg_funcptr_t *address;
-} NtDllRoutine;
+}			NtDllRoutine;
 
 static const NtDllRoutine routines[] = {
 	{"RtlGetLastNtStatus", (pg_funcptr_t *) &pg_RtlGetLastNtStatus}

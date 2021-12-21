@@ -295,6 +295,7 @@ typedef struct A_Expr
 typedef struct A_Const
 {
 	NodeTag		type;
+
 	/*
 	 * Value nodes are inline for performance.  You can treat 'val' as a node,
 	 * as in IsA(&val, Integer).  'val' is not valid if isnull is true.
@@ -756,7 +757,8 @@ typedef struct DefElem
 	NodeTag		type;
 	char	   *defnamespace;	/* NULL if unqualified name */
 	char	   *defname;
-	Node	   *arg;			/* typically Integer, Float, String, or TypeName */
+	Node	   *arg;			/* typically Integer, Float, String, or
+								 * TypeName */
 	DefElemAction defaction;	/* unspecified action, or SET/ADD/DROP */
 	int			location;		/* token location, or -1 if unknown */
 } DefElem;
@@ -1144,7 +1146,7 @@ typedef struct RangeTblEntry
 	 * Fields valid for ENR RTEs (else NULL/zero):
 	 */
 	char	   *enrname;		/* name of ephemeral named relation */
-	Cardinality	enrtuples;		/* estimated or actual from caller */
+	Cardinality enrtuples;		/* estimated or actual from caller */
 
 	/*
 	 * Fields valid in all RTEs:

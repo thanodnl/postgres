@@ -856,7 +856,7 @@ const ObjectAddress InvalidObjectAddress =
 };
 
 static ObjectAddress get_object_address_unqualified(ObjectType objtype,
-													String *strval, bool missing_ok);
+													String * strval, bool missing_ok);
 static ObjectAddress get_relation_by_qualified_name(ObjectType objtype,
 													List *object, Relation *relp,
 													LOCKMODE lockmode, bool missing_ok);
@@ -1255,7 +1255,7 @@ get_object_address_rv(ObjectType objtype, RangeVar *rel, List *object,
  */
 static ObjectAddress
 get_object_address_unqualified(ObjectType objtype,
-							   String *strval, bool missing_ok)
+							   String * strval, bool missing_ok)
 {
 	const char *name;
 	ObjectAddress address;

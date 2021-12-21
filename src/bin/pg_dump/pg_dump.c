@@ -244,7 +244,7 @@ static void dumpDefaultACL(Archive *fout, const DefaultACLInfo *daclinfo);
 static DumpId dumpACL(Archive *fout, DumpId objDumpId, DumpId altDumpId,
 					  const char *type, const char *name, const char *subname,
 					  const char *nspname, const char *owner,
-					  const DumpableAcl *dacl);
+					  const DumpableAcl * dacl);
 
 static void getDependencies(Archive *fout);
 static void BuildArchiveDependencies(Archive *fout);
@@ -14103,7 +14103,7 @@ static DumpId
 dumpACL(Archive *fout, DumpId objDumpId, DumpId altDumpId,
 		const char *type, const char *name, const char *subname,
 		const char *nspname, const char *owner,
-		const DumpableAcl *dacl)
+		const DumpableAcl * dacl)
 {
 	DumpId		aclDumpId = InvalidDumpId;
 	DumpOptions *dopt = fout->dopt;

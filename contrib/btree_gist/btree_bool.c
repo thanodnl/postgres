@@ -11,7 +11,7 @@ typedef struct boolkey
 {
 	bool		lower;
 	bool		upper;
-} boolKEY;
+}			boolKEY;
 
 /*
 ** bool ops
@@ -53,8 +53,8 @@ gbt_boollt(const void *a, const void *b, FmgrInfo *flinfo)
 static int
 gbt_boolkey_cmp(const void *a, const void *b, FmgrInfo *flinfo)
 {
-	boolKEY   *ia = (boolKEY *) (((const Nsrt *) a)->t);
-	boolKEY   *ib = (boolKEY *) (((const Nsrt *) b)->t);
+	boolKEY    *ia = (boolKEY *) (((const Nsrt *) a)->t);
+	boolKEY    *ib = (boolKEY *) (((const Nsrt *) b)->t);
 
 	if (ia->lower == ib->lower)
 	{

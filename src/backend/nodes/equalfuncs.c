@@ -2437,8 +2437,7 @@ static bool
 _equalA_Const(const A_Const *a, const A_Const *b)
 {
 	/*
-	 * Hack for in-line val field.  Also val is not valid is isnull is
-	 * true.
+	 * Hack for in-line val field.  Also val is not valid is isnull is true.
 	 */
 	if (!a->isnull && !b->isnull &&
 		!equal(&a->val, &b->val))
@@ -3123,7 +3122,7 @@ _equalList(const List *a, const List *b)
  */
 
 static bool
-_equalInteger(const Integer *a, const Integer *b)
+_equalInteger(const Integer * a, const Integer * b)
 {
 	COMPARE_SCALAR_FIELD(val);
 
@@ -3131,7 +3130,7 @@ _equalInteger(const Integer *a, const Integer *b)
 }
 
 static bool
-_equalFloat(const Float *a, const Float *b)
+_equalFloat(const Float * a, const Float * b)
 {
 	COMPARE_STRING_FIELD(val);
 
@@ -3139,7 +3138,7 @@ _equalFloat(const Float *a, const Float *b)
 }
 
 static bool
-_equalString(const String *a, const String *b)
+_equalString(const String * a, const String * b)
 {
 	COMPARE_STRING_FIELD(val);
 
@@ -3147,7 +3146,7 @@ _equalString(const String *a, const String *b)
 }
 
 static bool
-_equalBitString(const BitString *a, const BitString *b)
+_equalBitString(const BitString * a, const BitString * b)
 {
 	COMPARE_STRING_FIELD(val);
 

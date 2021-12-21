@@ -9338,7 +9338,7 @@ EmitWarningsOnPlaceholders(const char *className)
 {
 	int			classLen = strlen(className);
 	int			i;
-	MemoryContext	oldcontext;
+	MemoryContext oldcontext;
 
 	for (i = 0; i < num_guc_variables; i++)
 	{

@@ -85,8 +85,7 @@ typedef struct PgArchData
 	int			pgprocno;		/* pgprocno of archiver process */
 
 	/*
-	 * Forces a directory scan in pgarch_readyXlog().  Protected by
-	 * arch_lck.
+	 * Forces a directory scan in pgarch_readyXlog().  Protected by arch_lck.
 	 */
 	bool		force_dir_scan;
 
@@ -115,7 +114,7 @@ static PgArchData *PgArch = NULL;
 static binaryheap *arch_heap = NULL;
 static char arch_filenames[NUM_FILES_PER_DIRECTORY_SCAN][MAX_XFN_CHARS];
 static char *arch_files[NUM_FILES_PER_DIRECTORY_SCAN];
-static int arch_files_size = 0;
+static int	arch_files_size = 0;
 
 /*
  * Flags set by interrupt handlers for later service in the main loop.
@@ -134,7 +133,7 @@ static bool pgarch_readyXlog(char *xlog);
 static void pgarch_archiveDone(char *xlog);
 static void pgarch_die(int code, Datum arg);
 static void HandlePgArchInterrupts(void);
-static int ready_file_comparator(Datum a, Datum b, void *arg);
+static int	ready_file_comparator(Datum a, Datum b, void *arg);
 
 /* Report shared memory space needed by PgArchShmemInit */
 Size
@@ -662,13 +661,13 @@ pgarch_readyXlog(char *xlog)
 
 	/*
 	 * If we still have stored file names from the previous directory scan,
-	 * try to return one of those.  We check to make sure the status file
-	 * is still present, as the archive_command for a previous file may
-	 * have already marked it done.
+	 * try to return one of those.  We check to make sure the status file is
+	 * still present, as the archive_command for a previous file may have
+	 * already marked it done.
 	 */
 	while (arch_files_size > 0)
 	{
-		struct stat	st;
+		struct stat st;
 		char		status_file[MAXPGPATH];
 		char	   *arch_file;
 
@@ -735,8 +734,8 @@ pgarch_readyXlog(char *xlog)
 									   CStringGetDatum(basename), NULL) > 0)
 		{
 			/*
-			 * Remove the lowest priority file and add the current one to
-			 * the heap.
+			 * Remove the lowest priority file and add the current one to the
+			 * heap.
 			 */
 			arch_file = DatumGetCString(binaryheap_remove_first(arch_heap));
 			strcpy(arch_file, basename);
@@ -757,8 +756,8 @@ pgarch_readyXlog(char *xlog)
 		binaryheap_build(arch_heap);
 
 	/*
-	 * Fill arch_files array with the files to archive in ascending order
-	 * of priority.
+	 * Fill arch_files array with the files to archive in ascending order of
+	 * priority.
 	 */
 	arch_files_size = arch_heap->bh_size;
 	for (int i = 0; i < arch_files_size; i++)
@@ -782,10 +781,10 @@ pgarch_readyXlog(char *xlog)
 static int
 ready_file_comparator(Datum a, Datum b, void *arg)
 {
-	char *a_str = DatumGetCString(a);
-	char *b_str = DatumGetCString(b);
-	bool a_history = IsTLHistoryFileName(a_str);
-	bool b_history = IsTLHistoryFileName(b_str);
+	char	   *a_str = DatumGetCString(a);
+	char	   *b_str = DatumGetCString(b);
+	bool		a_history = IsTLHistoryFileName(a_str);
+	bool		b_history = IsTLHistoryFileName(b_str);
 
 	/* Timeline history files always have the highest priority. */
 	if (a_history != b_history)

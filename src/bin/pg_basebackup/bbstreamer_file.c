@@ -28,7 +28,7 @@ typedef struct bbstreamer_plain_writer
 	char	   *pathname;
 	FILE	   *file;
 	bool		should_close_file;
-} bbstreamer_plain_writer;
+}			bbstreamer_plain_writer;
 
 #ifdef HAVE_LIBZ
 typedef struct bbstreamer_gzip_writer
@@ -49,46 +49,46 @@ typedef struct bbstreamer_extractor
 	FILE	   *file;
 }			bbstreamer_extractor;
 
-static void bbstreamer_plain_writer_content(bbstreamer *streamer,
-											bbstreamer_member *member,
+static void bbstreamer_plain_writer_content(bbstreamer * streamer,
+											bbstreamer_member * member,
 											const char *data, int len,
 											bbstreamer_archive_context context);
-static void bbstreamer_plain_writer_finalize(bbstreamer *streamer);
-static void bbstreamer_plain_writer_free(bbstreamer *streamer);
+static void bbstreamer_plain_writer_finalize(bbstreamer * streamer);
+static void bbstreamer_plain_writer_free(bbstreamer * streamer);
 
-const bbstreamer_ops bbstreamer_plain_writer_ops = {
+const		bbstreamer_ops bbstreamer_plain_writer_ops = {
 	.content = bbstreamer_plain_writer_content,
 	.finalize = bbstreamer_plain_writer_finalize,
 	.free = bbstreamer_plain_writer_free
 };
 
 #ifdef HAVE_LIBZ
-static void bbstreamer_gzip_writer_content(bbstreamer *streamer,
-										   bbstreamer_member *member,
+static void bbstreamer_gzip_writer_content(bbstreamer * streamer,
+										   bbstreamer_member * member,
 										   const char *data, int len,
 										   bbstreamer_archive_context context);
-static void bbstreamer_gzip_writer_finalize(bbstreamer *streamer);
-static void bbstreamer_gzip_writer_free(bbstreamer *streamer);
+static void bbstreamer_gzip_writer_finalize(bbstreamer * streamer);
+static void bbstreamer_gzip_writer_free(bbstreamer * streamer);
 static const char *get_gz_error(gzFile gzf);
 
-const bbstreamer_ops bbstreamer_gzip_writer_ops = {
+const		bbstreamer_ops bbstreamer_gzip_writer_ops = {
 	.content = bbstreamer_gzip_writer_content,
 	.finalize = bbstreamer_gzip_writer_finalize,
 	.free = bbstreamer_gzip_writer_free
 };
 #endif
 
-static void bbstreamer_extractor_content(bbstreamer *streamer,
-										 bbstreamer_member *member,
+static void bbstreamer_extractor_content(bbstreamer * streamer,
+										 bbstreamer_member * member,
 										 const char *data, int len,
 										 bbstreamer_archive_context context);
-static void bbstreamer_extractor_finalize(bbstreamer *streamer);
-static void bbstreamer_extractor_free(bbstreamer *streamer);
+static void bbstreamer_extractor_finalize(bbstreamer * streamer);
+static void bbstreamer_extractor_free(bbstreamer * streamer);
 static void extract_directory(const char *filename, mode_t mode);
 static void extract_link(const char *filename, const char *linktarget);
 static FILE *create_file_for_extract(const char *filename, mode_t mode);
 
-const bbstreamer_ops bbstreamer_extractor_ops = {
+const		bbstreamer_ops bbstreamer_extractor_ops = {
 	.content = bbstreamer_extractor_content,
 	.finalize = bbstreamer_extractor_finalize,
 	.free = bbstreamer_extractor_free
@@ -109,7 +109,7 @@ bbstreamer_plain_writer_new(char *pathname, FILE *file)
 	bbstreamer_plain_writer *streamer;
 
 	streamer = palloc0(sizeof(bbstreamer_plain_writer));
-	*((const bbstreamer_ops **) &streamer->base.bbs_ops) =
+	*((const bbstreamer_ops * *) &streamer->base.bbs_ops) =
 		&bbstreamer_plain_writer_ops;
 
 	streamer->pathname = pstrdup(pathname);
@@ -133,8 +133,8 @@ bbstreamer_plain_writer_new(char *pathname, FILE *file)
  * Write archive content to file.
  */
 static void
-bbstreamer_plain_writer_content(bbstreamer *streamer,
-								bbstreamer_member *member, const char *data,
+bbstreamer_plain_writer_content(bbstreamer * streamer,
+								bbstreamer_member * member, const char *data,
 								int len, bbstreamer_archive_context context)
 {
 	bbstreamer_plain_writer *mystreamer;
@@ -161,7 +161,7 @@ bbstreamer_plain_writer_content(bbstreamer *streamer,
  * the file if we opened it, but not if the caller provided it.
  */
 static void
-bbstreamer_plain_writer_finalize(bbstreamer *streamer)
+bbstreamer_plain_writer_finalize(bbstreamer * streamer)
 {
 	bbstreamer_plain_writer *mystreamer;
 
@@ -182,7 +182,7 @@ bbstreamer_plain_writer_finalize(bbstreamer *streamer)
  * Free memory associated with this bbstreamer.
  */
 static void
-bbstreamer_plain_writer_free(bbstreamer *streamer)
+bbstreamer_plain_writer_free(bbstreamer * streamer)
 {
 	bbstreamer_plain_writer *mystreamer;
 
@@ -210,7 +210,7 @@ bbstreamer_gzip_writer_new(char *pathname, FILE *file, int compresslevel)
 	bbstreamer_gzip_writer *streamer;
 
 	streamer = palloc0(sizeof(bbstreamer_gzip_writer));
-	*((const bbstreamer_ops **) &streamer->base.bbs_ops) =
+	*((const bbstreamer_ops * *) &streamer->base.bbs_ops) =
 		&bbstreamer_gzip_writer_ops;
 
 	streamer->pathname = pstrdup(pathname);
@@ -263,8 +263,8 @@ bbstreamer_gzip_writer_new(char *pathname, FILE *file, int compresslevel)
  * Write archive content to gzip file.
  */
 static void
-bbstreamer_gzip_writer_content(bbstreamer *streamer,
-							   bbstreamer_member *member, const char *data,
+bbstreamer_gzip_writer_content(bbstreamer * streamer,
+							   bbstreamer_member * member, const char *data,
 							   int len, bbstreamer_archive_context context)
 {
 	bbstreamer_gzip_writer *mystreamer;
@@ -297,7 +297,7 @@ bbstreamer_gzip_writer_content(bbstreamer *streamer,
  * is the same as for bbstreamer_plain_writer.
  */
 static void
-bbstreamer_gzip_writer_finalize(bbstreamer *streamer)
+bbstreamer_gzip_writer_finalize(bbstreamer * streamer)
 {
 	bbstreamer_gzip_writer *mystreamer;
 
@@ -318,7 +318,7 @@ bbstreamer_gzip_writer_finalize(bbstreamer *streamer)
  * Free memory associated with this bbstreamer.
  */
 static void
-bbstreamer_gzip_writer_free(bbstreamer *streamer)
+bbstreamer_gzip_writer_free(bbstreamer * streamer)
 {
 	bbstreamer_gzip_writer *mystreamer;
 
@@ -376,7 +376,7 @@ bbstreamer_extractor_new(const char *basepath,
 	bbstreamer_extractor *streamer;
 
 	streamer = palloc0(sizeof(bbstreamer_extractor));
-	*((const bbstreamer_ops **) &streamer->base.bbs_ops) =
+	*((const bbstreamer_ops * *) &streamer->base.bbs_ops) =
 		&bbstreamer_extractor_ops;
 	streamer->basepath = pstrdup(basepath);
 	streamer->link_map = link_map;
@@ -389,7 +389,7 @@ bbstreamer_extractor_new(const char *basepath,
  * Extract archive contents to the filesystem.
  */
 static void
-bbstreamer_extractor_content(bbstreamer *streamer, bbstreamer_member *member,
+bbstreamer_extractor_content(bbstreamer * streamer, bbstreamer_member * member,
 							 const char *data, int len,
 							 bbstreamer_archive_context context)
 {
@@ -559,10 +559,10 @@ create_file_for_extract(const char *filename, mode_t mode)
  * There's nothing to do here but sanity checking.
  */
 static void
-bbstreamer_extractor_finalize(bbstreamer *streamer)
+bbstreamer_extractor_finalize(bbstreamer * streamer)
 {
 	bbstreamer_extractor *mystreamer PG_USED_FOR_ASSERTS_ONLY
-		= (bbstreamer_extractor *) streamer;
+	= (bbstreamer_extractor *) streamer;
 
 	Assert(mystreamer->file == NULL);
 }
@@ -571,7 +571,7 @@ bbstreamer_extractor_finalize(bbstreamer *streamer)
  * Free memory.
  */
 static void
-bbstreamer_extractor_free(bbstreamer *streamer)
+bbstreamer_extractor_free(bbstreamer * streamer)
 {
 	bbstreamer_extractor *mystreamer = (bbstreamer_extractor *) streamer;
 

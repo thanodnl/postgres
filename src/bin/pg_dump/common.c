@@ -59,7 +59,7 @@ typedef struct _catalogIdMapEntry
 	uint32		hashval;		/* hash code for the CatalogId */
 	DumpableObject *dobj;		/* the associated DumpableObject, if any */
 	ExtensionInfo *ext;			/* owning extension, if any */
-} CatalogIdMapEntry;
+}			CatalogIdMapEntry;
 
 #define SH_PREFIX		catalogid
 #define SH_ELEMENT_TYPE	CatalogIdMapEntry
@@ -77,7 +77,7 @@ typedef struct _catalogIdMapEntry
 
 #define CATALOGIDHASH_INITIAL_SIZE	10000
 
-static catalogid_hash *catalogIdHash = NULL;
+static catalogid_hash * catalogIdHash = NULL;
 
 static void flagInhTables(Archive *fout, TableInfo *tbinfo, int numTables,
 						  InhInfo *inhinfo, int numInherits);

@@ -3237,7 +3237,7 @@ CheckForSessionAndXactLocks(void)
 		LOCKTAG		lock;		/* identifies the lockable object */
 		bool		sessLock;	/* is any lockmode held at session level? */
 		bool		xactLock;	/* is any lockmode held at xact level? */
-	} PerLockTagEntry;
+	}			PerLockTagEntry;
 
 	HASHCTL		hash_ctl;
 	HTAB	   *lockhtab;
